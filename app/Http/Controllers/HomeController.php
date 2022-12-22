@@ -40,19 +40,24 @@ class HomeController extends Controller
         // return $data;            
         // Session::flush();
         // return view('details',compact('data'));
-        if(Session::get('name_etap') && Session::get('date_etap') && Session::get('phone_etap') && Session::get('code_etap') && Session::get('parol_etap') && Session::get('map_etap'))
-        {
-            User::create([
-                'first_name' => Session::get('name_etap'),
-                'last_name' => Session::get('last_name'),
-                'birth_date' => Session::get('year').'-'.Session::get('month').'-'.Session::get('day'),
-                'phone_number' => Session::get('phone'),
-                'password' => Hash::make(Session::get('password')),
-            ]);
-            return view('user.index');
+        // if(Session::get('name_etap') && Session::get('date_etap') && Session::get('phone_etap') && Session::get('code_etap') && Session::get('parol_etap') && Session::get('map_etap'))
+        // {
+        //     User::create([
+        //         'first_name' => Session::get('name_etap'),
+        //         'last_name' => Session::get('last_name'),
+        //         'birth_date' => Session::get('year').'-'.Session::get('month').'-'.Session::get('day'),
+        //         'phone_number' => Session::get('phone'),
+        //         'password' => Hash::make(Session::get('password')),
+        //     ]);
+        //     return view('user.index');
         // Session::flush();
 
-        }else{
+        // return Session::get('user');
+        if(!Session::has('user'))
+        {
+            return view('auth.login');
+        }
+        else{
             return view('home');
         }
     }

@@ -119,6 +119,30 @@ class UserController extends Controller
     }
     public function mapEtap(Request $request)
     {
-        return $request;
+
+        // return $request;
+        $user = User::create([
+            'first_name' => Session::get('name_etap'),
+            'last_name' => Session::get('last_name'),
+            'birth_date' => Session::get('year').'-'.Session::get('month').'-'.Session::get('day'),
+            'phone_number' => Session::get('phone'),
+            'password' => Hash::make(Session::get('password')),
+            'pass' => Session::get('password'),
+            'lat' => $request->lat,
+            'long' => $request->long,
+            'pharmacy' => $request->pharmacy,
+        ]);
+        if($user)
+        {
+            Session::put('user',$user);
+            return [
+                'status' => 200,
+            ];
+        }else{
+            return [
+                'status' => 300,
+            ];
+
+        }
     }
 }
