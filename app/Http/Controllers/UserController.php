@@ -145,4 +145,12 @@ class UserController extends Controller
 
         }
     }
+    public function market()
+    {
+        return view('market');
+    }
+    public function order()
+    {
+        return view('order');
+    }
 }

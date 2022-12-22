@@ -26,6 +26,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home', [UserController::class, 'index'])->name('user');
 Route::get('/shopping', [UserController::class, 'shopping'])->name('shopping');
 
+Route::get('market', [UserController::class, 'market'])->name('market');
+Route::get('order', [UserController::class, 'order'])->name('order');
+
 
 Route::post('/name-etap', [UserController::class, 'nameEtap'])->name('name-etap');
 Route::post('/date-etap', [UserController::class, 'dateEtap'])->name('date-etap');
