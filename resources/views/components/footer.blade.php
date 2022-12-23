@@ -12,7 +12,7 @@
             </a>
         </div>
         <div class="col-auto">
-            <a href="{{route('order')}}" class="">
+            <a href="{{route('order.index')}}" class="">
                 <img src="{{asset('promo/dist/img/promo/zakaz2.png')}}" height="60px" alt="User Avatar">
             </a>
         </div>

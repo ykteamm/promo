@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,5 +40,13 @@ Route::post('/phone-etap', [UserController::class, 'phoneEtap'])->name('phone-et
 Route::post('/code-etap', [UserController::class, 'codeEtap'])->name('code-etap');
 Route::post('/parol-etap', [UserController::class, 'parolEtap'])->name('parol-etap');
 Route::post('/map-etap', [UserController::class, 'mapEtap'])->name('map-etap');
+
+Route::resource('product', ProductController::class);
+Route::resource('order', OrderController::class);
+Route::resource('admin-order', AdminOrderController::class);
+
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin');
+});
 // });
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Stevebauman\Location\Facades\Location;
-
+use App\Models\Product;
 class UserController extends Controller
 {
     public function index()
@@ -151,6 +151,6 @@ class UserController extends Controller
     }
     public function order()
     {
-        return view('order');
+        
     }
 }

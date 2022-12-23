@@ -68,7 +68,7 @@ class LoginController extends Controller
         ]);
         // return $request->password;
 
-        $user = User::where('pass',$request->password)->exists();
+        $user = User::where('pass',$request->password)->first();
 
         if($user)
         {
