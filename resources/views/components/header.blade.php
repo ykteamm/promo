@@ -5,7 +5,7 @@
         </div>
         <div class="col-md-4">
             <div class="input-group">
-                <input type="text" class="form-control" disabled style="border-top-right-radius: 18px !important;border-bottom-right-radius: 18px !important;height: calc(1.5em + 0.75rem + -6px);">
+                <input type="text" value="{{Auth::user()->account}}" class="form-control" disabled style="border-top-right-radius: 18px !important;border-bottom-right-radius: 18px !important;height: calc(1.5em + 0.75rem + -6px);">
                 <div class="input-group-append">
                     <button class="btn" type="button" style="padding: 0px 0px;">
                         <img src="{{asset('promo/dist/img/promo/oltin3.png')}}" width="30px" alt="">
@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-4">
             <div class="input-group">
-                <input type="text" class="form-control" disabled style="border-top-right-radius: 18px !important;border-bottom-right-radius: 18px !important;height: calc(1.5em + 0.75rem + -6px);">
+                <input type="text" value="{{Auth::user()->cashback}}" class="form-control" disabled style="border-top-right-radius: 18px !important;border-bottom-right-radius: 18px !important;height: calc(1.5em + 0.75rem + -6px);">
                 <div class="input-group-append">
                     <button class="btn" type="button" style="padding: 0px 0px;">
                         <img src="{{asset('promo/dist/img/promo/eleksir3.png')}}" width="30px" alt="">

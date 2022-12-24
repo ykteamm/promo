@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
 use App\Models\User;
 class AdminOrderController extends Controller
 {
@@ -14,9 +16,9 @@ class AdminOrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with('product')->get();
-        $users = User::all();
-        return view('admin.order.index',compact('orders','users'));
+        $users = User::with('order','order.orderProduct','order.orderProduct.product')->get();
+        // return $users;
+        return view('admin.order.index',compact('users'));
     }
 
     /**
@@ -84,4 +86,36 @@ class AdminOrderController extends Controller
     {
         //
     }
+
+    public function delivery(Request $request, $id)
+    {
+        $update = Order::where('id',$id)->update([
+            'delivery' => 1
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function cashback(Request $request, $id)
+    {
+        $orders = Order::with('orderProduct','orderProduct.product','user')->where('id',$id)->first();
+        $user_id = Order::where('id',$id)->value('user_id');
+        $bonus = 0;
+        foreach ($orders->orderProduct as $key => $value) {
+            $bonus += $value->product->bonus*$value->stock;
+        }
+        $user_account = User::where('id',$user_id)->value('account');
+        $user_cashback = User::where('id',$user_id)->value('cashback');
+
+        $users = User::where('id',$user_id)->update([
+            'account' => $user_account + $bonus/2,
+            'cashback' => $user_cashback + $bonus/2000,
+        ]);
+        $update = Order::where('id',$id)->update([
+            'cashback' => 1
+        ]);
+        return redirect()->back();
+    }
+
+
 }

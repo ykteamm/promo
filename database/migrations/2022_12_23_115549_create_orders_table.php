@@ -16,10 +16,8 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('product_id');
-            $table->integer('stock');
             $table->integer('sort');
-            $table->integer('account')->default(0);
+            $table->integer('delivery')->default(0);
             $table->integer('cashback')->default(0);
             $table->timestamps();
         });

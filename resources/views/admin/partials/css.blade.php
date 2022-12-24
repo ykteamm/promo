@@ -14,3 +14,7 @@
 
 <!-- Custom styles for this template -->
 <link href="{{asset( 'mobile/css/style.css') }}" rel="stylesheet" id="style">
+
+<link href="{{asset('mobile/fontawesome/css/fontawesome.css') }}" rel="stylesheet">
+<link href="{{asset('mobile/fontawesome/css/brands.css') }}" rel="stylesheet">
+<link href="{{asset('mobile/fontawesome/css/solid.css') }}" rel="stylesheet">

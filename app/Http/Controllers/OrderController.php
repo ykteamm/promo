@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\OrderProduct ;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 class OrderController extends Controller
 {
@@ -39,23 +41,27 @@ class OrderController extends Controller
     {
         $inputs = $request->all();
         unset($inputs['_token']);
-        foreach ($inputs as $key => $value) {
-            if(intval($value) != 0)
-            {
-                $exists = Order::where('user_id',Session::get('user')->id)->where('product_id',$key)->value('sort');
-                if($exists != NULL)
+        $order_exists = Order::where('user_id',Auth::user()->id)->value('sort');
+        if($order_exists != NULL)
                 {
-                    $sort = intval($exists)+1;
+                    $sort = intval($order_exists)+1;
                 }else{
                     $sort = 1;
                 }
-                $new = new Order([
-                    'user_id' => Session::get('user')->id,
+                $new_order = new Order([
+                    'user_id' => Auth::user()->id,
+                    'sort' => $sort,
+                ]);
+                $new_order->save();
+        foreach ($inputs as $key => $value) {
+            if(intval($value) != 0)
+            {
+                $new_order_product = new OrderProduct([
+                    'order_id' => $new_order->id,
                     'product_id' => $key,
                     'stock' => $value,
-                    'sort' => $sort
                 ]);
-                $new->save();
+                $new_order_product->save();
             }
         }
         return redirect()->back();

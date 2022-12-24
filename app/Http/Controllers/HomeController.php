@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 use Stevebauman\Location\Facades\Location;
+// use Stevebauman\Location\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -53,13 +55,15 @@ class HomeController extends Controller
         // Session::flush();
 
         // return Session::get('user');
-        if(!Session::has('user'))
-        {
-            return view('auth.login');
-        }
-        else{
+        // return Auth::user();
+        // if(!Session::has('user'))
+        // {
+        //     return view('auth.login');
+        // }
+        // else{
+            // $user = User::where('id',Session::get('user')->id)->first();
             return view('home');
-        }
+        // }
     }
     public function getIp(){
         foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){

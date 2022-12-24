@@ -31,7 +31,7 @@ class User extends Authenticatable
 
     public function order()
     {
-        return $this->hasMany(Order::class,'user_id','id');
+        return $this->hasMany(Order::class,'user_id','id')->orderBy('id','ASC');
     }
 
     /**

@@ -261,12 +261,22 @@
     </div>
     </div>
     <div class="login-user d-none" style="margin-top:40%;">
-        <form action="{{route('login')}}" method="POST">
+        <form action="{{route('login')}}" method="POST" id="loginForm">
             @csrf
         <div class="card card-primary mt-5">
             
-            <div class="card-body ">
+            <div class="card-body">
                 <div class="form-group text-center">
+                    <label>Telefon raqamingizni kiriting</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        </div>
+                        <input type="text" class="form-control delete-input" data-inputmask='"mask": "(99) 999-99-99"' data-mask>
+                        <input type="text" class="form-control d-none login-input" name="phone_number">
+                    </div>
+                  </div>
+                  <div class="form-group text-center">
                     <label>Parol kiriting</label>
                     <div class="input-group">
                       <div class="input-group-prepend">
@@ -275,12 +285,13 @@
                       <input type="password" class="form-control" min="4" name="password">
                     </div> 
                   </div>
+                  
             </div>
             
         </div> 
         <div class="card-body bottom-footer">
             <div class="social-auth-links text-center mt-2 mb-3">
-                <button type="submit" class="btn btn-block btn-primary">Kirish</button>
+                <button type="button" onclick="login()" class="btn btn-block btn-primary">Kirish</button>
             </div>
         </div>
     </form>
@@ -293,6 +304,14 @@
 
 <script src="https://api-maps.yandex.ru/2.1/?apikey=7a4a276f-4b19-448d-877b-1c87a0b350c3&lang=ru_RU" type="text/javascript"></script>
 <script>
+    function login()
+    {
+        var suffix = $('.delete-input').val();
+        var number = suffix.replace(/[^0-9]/g,'');    
+        $('.delete-input').remove();
+        $('.login-input').val(number);
+        $("#loginForm").submit();
+    }
     function userLogin()
     {
         $('.register-user').addClass('d-none');
@@ -311,8 +330,9 @@
       {
          var first_name = $("input[name=first_name]").val();
          var last_name = $("input[name=last_name]").val();
-
-         var _token = $('meta[name="csrf-token"]').attr('content');
+         if(first_name.length > 0 && last_name.length > 0)
+         {
+            var _token = $('meta[name="csrf-token"]').attr('content');
           $.ajax({
                 url: "/name-etap",
                 type:"POST",
@@ -330,228 +350,240 @@
                     }
                 }
             });
+         }
         }
         function dateEtap()
         {
             var year = $("select[name=year]").val();
             var month = $("select[name=month]").val();
             var day = $("select[name=day]").val();
+            if(year.length > 0 && month.length > 0 && day.length > 0)
+            {
+                var _token   = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                        url: "/date-etap",
+                        type:"POST",
+                        data:{
+                            year: year,
+                            month: month,
+                            day: day,
+                            _token: _token
+                        },
+                        success:function(response){
+                            if(response.status == 200){
 
-            var _token   = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                    url: "/date-etap",
-                    type:"POST",
-                    data:{
-                        year: year,
-                        month: month,
-                        day: day,
-                        _token: _token
-                    },
-                    success:function(response){
-                        if(response.status == 200){
-
-                            $('.date-etap').addClass('d-none');
-                            $('.phone-etap').removeClass('d-none');
-                            $('.name-etap-last').addClass('d-none');
-                            $('.date-etap-last').removeClass('d-none');
+                                $('.date-etap').addClass('d-none');
+                                $('.phone-etap').removeClass('d-none');
+                                $('.name-etap-last').addClass('d-none');
+                                $('.date-etap-last').removeClass('d-none');
+                            }
+                            if(response.code == 200 && response.phone == 200){
+                                $('.for-kod-etap').addClass('d-none');
+                                $('.next-etap').removeClass('d-none');
+                            }
+                            if(response.code != 200 && response.phone == 200){
+                                $('.for-kod-etap').addClass('d-none');
+                                $('.kod-etap').removeClass('d-none');
+                            }
+                            if(response.code == 200 && response.phone != 200){
+                                $('.for-kod-etap').addClass('d-none');
+                                $('.kod-etap').removeClass('d-none');
+                            }
                         }
-                        if(response.code == 200 && response.phone == 200){
-                            $('.for-kod-etap').addClass('d-none');
-                            $('.next-etap').removeClass('d-none');
-                        }
-                        if(response.code != 200 && response.phone == 200){
-                            $('.for-kod-etap').addClass('d-none');
-                            $('.kod-etap').removeClass('d-none');
-                        }
-                        if(response.code == 200 && response.phone != 200){
-                            $('.for-kod-etap').addClass('d-none');
-                            $('.kod-etap').removeClass('d-none');
-                        }
-                    }
                 });
             }
+        }
             function phoneEtap()
         {
             var phone = $("input[name=phone]").val();
+            if(phone.length > 0)
+            {
+                var _token   = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                        url: "/phone-etap",
+                        type:"POST",
+                        data:{
+                            phone: phone,
+                            _token: _token
+                        },
+                        success:function(response){
+                            if(response.status == 200){
 
-            var _token   = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                    url: "/phone-etap",
-                    type:"POST",
-                    data:{
-                        phone: phone,
-                        _token: _token
-                    },
-                    success:function(response){
-                        if(response.status == 200){
-
-                            $('.for-kod-etap').addClass('d-none');
-                            $('.kod-etap').removeClass('d-none');
+                                $('.for-kod-etap').addClass('d-none');
+                                $('.kod-etap').removeClass('d-none');
+                            }
                         }
-                    }
                 });
             }
+        }
         function kodEtap()
         {
             var code = $("input[name=code]").val();
+            if(code.length > 0)
+            {
+                var _token   = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                        url: "/code-etap",
+                        type:"POST",
+                        data:{
+                            code: code,
+                            _token: _token
+                        },
+                        success:function(response){
+                            if(response.status == 200){
+                                $('.retry-etap').addClass('d-none');
+                                $('.done-code-etap').removeClass('d-none');
+                                $('.phone-number').text(response.status.number);
 
-            var _token   = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                    url: "/code-etap",
-                    type:"POST",
-                    data:{
-                        code: code,
-                        _token: _token
-                    },
-                    success:function(response){
-                        if(response.status == 200){
-                            $('.retry-etap').addClass('d-none');
-                            $('.done-code-etap').removeClass('d-none');
-                            $('.phone-number').text(response.status.number);
+                                $('.kod-etap').addClass('d-none');
+                                $('.phone-etap').addClass('d-none');
+                                $('.parol-etap').removeClass('d-none');
+                                $('.phone-etap-last').removeClass('d-none');
+                                $('.code-etap-last').addClass('d-none');
+                                $('.date-etap-last').addClass('d-none');
 
-                            $('.kod-etap').addClass('d-none');
-                            $('.phone-etap').addClass('d-none');
-                            $('.parol-etap').removeClass('d-none');
-                            $('.phone-etap-last').removeClass('d-none');
-                            $('.code-etap-last').addClass('d-none');
-                            $('.date-etap-last').addClass('d-none');
-
-                            $('.first-phone-text').text('Telefon raqamingiz tasdiqlangan');
+                                $('.first-phone-text').text('Telefon raqamingiz tasdiqlangan');
 
 
-                        }else{
-                            $('.retry-etap').removeClass('d-none');
+                            }else{
+                                $('.retry-etap').removeClass('d-none');
+                            }
                         }
-                    }
                 });
+            }
+
         }
         function parolEtap()
         {
             var password = $("input[name=password]").val();
+            if(password.length > 0)
+            {
+                var _token   = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                        url: "/parol-etap",
+                        type:"POST",
+                        data:{
+                            password: password,
+                            _token: _token
+                        },
+                        success:function(response){
+                            if(response.status == 200)
+                            {
+                                $('.map-etap').removeClass('d-none');
+                                $('.map-etap-last').removeClass('d-none');
+                                $('.parol-etap').addClass('d-none');
+                                $('.phone-etap-last').addClass('d-none');
+                                ymaps.ready(init);
 
-            var _token   = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                    url: "/parol-etap",
-                    type:"POST",
-                    data:{
-                        password: password,
-                        _token: _token
-                    },
-                    success:function(response){
-                        if(response.status == 200)
-                        {
-                            $('.map-etap').removeClass('d-none');
-                            $('.map-etap-last').removeClass('d-none');
-                            $('.parol-etap').addClass('d-none');
-                            $('.phone-etap-last').addClass('d-none');
-                            ymaps.ready(init);
-
-                            function init() {
-                                var myPlacemark;
-                                var geolocation = ymaps.geolocation;
-                                    myMap = new ymaps.Map('map', {
-                                        center: [55, 34],
-                                        zoom: 1
-                                    }, {
-                                        searchControlProvider: 'yandex#search'
-                                    });
-
-                                // Сравним положение, вычисленное по ip пользователя и
-                                // положение, вычисленное средствами браузера.
-                                    geolocation.get({
-                                        provider: 'yandex',
-                                        mapStateAutoApply: true
-                                    }).then(function (result) {
-                                        // Красным цветом пометим положение, вычисленное через ip.
-                                        result.geoObjects.options.set('preset', 'islands#redCircleIcon');
-                                        result.geoObjects.get(0).properties.set({
-                                            balloonContentBody: 'Мое местоположение'
+                                function init() {
+                                    var myPlacemark;
+                                    var geolocation = ymaps.geolocation;
+                                        myMap = new ymaps.Map('map', {
+                                            center: [55, 34],
+                                            zoom: 1
+                                        }, {
+                                            searchControlProvider: 'yandex#search'
                                         });
-                                        $("input[name=lat]").val(result.geoObjects.position[0]);
-                                        $("input[name=long]").val(result.geoObjects.position[1]);
-                                        myMap.geoObjects.add(result.geoObjects);
-                                    });
 
-                                geolocation.get({
-                                    provider: 'browser',
-                                    mapStateAutoApply: true
-                                });
-                                myMap.events.add('click', function (e) {
-                                    var coords = e.get('coords');
-                                    $("input[name=lat]").val(coords[0]);
-                                    $("input[name=long]").val(coords[1]);
-                                    // console.log(coords);
-                                    // Moving the placemark if it was already created
-                                    if (myPlacemark) {
-                                        myPlacemark.geometry.setCoordinates(coords);
-                                    }
-                                    // Otherwise, creating it.
-                                    else {
-                                        myPlacemark = createPlacemark(coords);
-                                        myMap.geoObjects.add(myPlacemark);
-                                        // Listening for the dragging end event on the placemark.
-                                        myPlacemark.events.add('dragend', function () {
-                                            getAddress(myPlacemark.geometry.getCoordinates());
-                                        });
-                                    }
-                                    getAddress(coords);
-                                });
-                                function createPlacemark(coords) {
-                                    return new ymaps.Placemark(coords, {
-                                        iconCaption: 'searching...'
-                                    }, {
-                                        preset: 'islands#violetDotIconWithCaption',
-                                        draggable: true
-                                    });
-                                }
-
-                                // Determining the address by coordinates (reverse geocoding).
-                                function getAddress(coords) {
-                                    myPlacemark.properties.set('iconCaption', 'searching...');
-                                    ymaps.geocode(coords).then(function (res) {
-                                        var firstGeoObject = res.geoObjects.get(0);
-                                        myPlacemark.properties
-                                            .set({
-                                                // Forming a string with the object's data.
-                                                iconCaption: [
-                                                    // The name of the municipality or the higher territorial-administrative formation.
-                                                    firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
-                                                    // Getting the path to the toponym; if the method returns null, then requesting the name of the building.
-                                                    firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
-                                                ].filter(Boolean).join(', '),
-                                                // Specifying a string with the address of the object as the balloon content.
-                                                balloonContent: firstGeoObject.getAddressLine()
+                                    // Сравним положение, вычисленное по ip пользователя и
+                                    // положение, вычисленное средствами браузера.
+                                        geolocation.get({
+                                            provider: 'yandex',
+                                            mapStateAutoApply: true
+                                        }).then(function (result) {
+                                            // Красным цветом пометим положение, вычисленное через ip.
+                                            result.geoObjects.options.set('preset', 'islands#redCircleIcon');
+                                            result.geoObjects.get(0).properties.set({
+                                                balloonContentBody: 'Мое местоположение'
                                             });
+                                            $("input[name=lat]").val(result.geoObjects.position[0]);
+                                            $("input[name=long]").val(result.geoObjects.position[1]);
+                                            myMap.geoObjects.add(result.geoObjects);
+                                        });
+
+                                    geolocation.get({
+                                        provider: 'browser',
+                                        mapStateAutoApply: true
                                     });
+                                    myMap.events.add('click', function (e) {
+                                        var coords = e.get('coords');
+                                        $("input[name=lat]").val(coords[0]);
+                                        $("input[name=long]").val(coords[1]);
+                                        // console.log(coords);
+                                        // Moving the placemark if it was already created
+                                        if (myPlacemark) {
+                                            myPlacemark.geometry.setCoordinates(coords);
+                                        }
+                                        // Otherwise, creating it.
+                                        else {
+                                            myPlacemark = createPlacemark(coords);
+                                            myMap.geoObjects.add(myPlacemark);
+                                            // Listening for the dragging end event on the placemark.
+                                            myPlacemark.events.add('dragend', function () {
+                                                getAddress(myPlacemark.geometry.getCoordinates());
+                                            });
+                                        }
+                                        getAddress(coords);
+                                    });
+                                    function createPlacemark(coords) {
+                                        return new ymaps.Placemark(coords, {
+                                            iconCaption: 'searching...'
+                                        }, {
+                                            preset: 'islands#violetDotIconWithCaption',
+                                            draggable: true
+                                        });
+                                    }
+
+                                    // Determining the address by coordinates (reverse geocoding).
+                                    function getAddress(coords) {
+                                        myPlacemark.properties.set('iconCaption', 'searching...');
+                                        ymaps.geocode(coords).then(function (res) {
+                                            var firstGeoObject = res.geoObjects.get(0);
+                                            myPlacemark.properties
+                                                .set({
+                                                    // Forming a string with the object's data.
+                                                    iconCaption: [
+                                                        // The name of the municipality or the higher territorial-administrative formation.
+                                                        firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
+                                                        // Getting the path to the toponym; if the method returns null, then requesting the name of the building.
+                                                        firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
+                                                    ].filter(Boolean).join(', '),
+                                                    // Specifying a string with the address of the object as the balloon content.
+                                                    balloonContent: firstGeoObject.getAddressLine()
+                                                });
+                                        });
+                                    }
                                 }
                             }
                         }
-                    }
                 });
+            }
         }
         function mapEtap()
         {
             var lat = $("input[name=lat]").val();
             var long = $("input[name=long]").val();
             var pharmacy = $("input[name=pharmacy]").val();
-
-            var _token   = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                    url: "/map-etap",
-                    type:"POST",
-                    data:{
-                        lat: lat,
-                        long: long,
-                        pharmacy: pharmacy,
-                        _token: _token
-                    },
-                    success:function(response){
-                        if(response.status == 200)
-                        {
-                            window.location.href = "{{ route('home')}}";
+            if(lat.length > 0 && long.length > 0 && pharmacy.length > 0)
+            {
+                var _token   = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                        url: "/map-etap",
+                        type:"POST",
+                        data:{
+                            lat: lat,
+                            long: long,
+                            pharmacy: pharmacy,
+                            _token: _token
+                        },
+                        success:function(response){
+                            if(response.status == 200)
+                            {
+                                window.location.href = "{{ route('login')}}";
+                            }
                         }
-                    }
                 });
+            }
         }
         function nameEtapLast()
         {

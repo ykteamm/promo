@@ -18,7 +18,7 @@
 </div>
 
 <div class="container text-center text-white" style="margin-top: 20%;">
-    <h3 class="mb-1" style="font-family: Supercell-Magic">Jalilova Shoira</h1>
-    <h1 style="font-family: Supercell-Magic">ASR</h1>
+    <h3 class="mb-1" style="font-family: Supercell-Magic">{{Auth::user()->last_name}} {{Auth::user()->first_name}}</h1>
+    <h1 style="font-family: Supercell-Magic">{{ Auth::user()->pharmacy }}</h1>
 </div>
 @endsection

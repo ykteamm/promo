@@ -9,24 +9,26 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Stevebauman\Location\Facades\Location;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
+
 class UserController extends Controller
 {
     public function index()
     {
 
-        if(Session::get('name_etap') && Session::get('date_etap') && Session::get('phone_etap') && Session::get('code_etap') && Session::get('parol_etap'))
-        {
-            User::create([
-                'first_name' => Session::get('name_etap'),
-                'last_name' => Session::get('last_name'),
-                'birth_date' => Session::get('year').'-'.Session::get('month').'-'.Session::get('day'),
-                'phone_number' => Session::get('phone'),
-                'password' => Hash::make(Session::get('password')),
-            ]);
-            return view('user.index');
-        }else{
-            return route('user');
-        }
+        // if(Session::get('name_etap') && Session::get('date_etap') && Session::get('phone_etap') && Session::get('code_etap') && Session::get('parol_etap'))
+        // {
+        //     User::create([
+        //         'first_name' => Session::get('name_etap'),
+        //         'last_name' => Session::get('last_name'),
+        //         'birth_date' => Session::get('year').'-'.Session::get('month').'-'.Session::get('day'),
+        //         'phone_number' => Session::get('phone'),
+        //         'password' => Hash::make(Session::get('password')),
+        //     ]);
+        //     return view('user.index');
+        // }else{
+        //     return route('user');
+        // }
     }
 
     public function shopping()
@@ -149,8 +151,34 @@ class UserController extends Controller
     {
         return view('market');
     }
-    public function order()
+    public function login(Request $request)
     {
-        
+
+        $request->validate([
+            'password' => 'required|min:4',
+        ]);
+        // return $request->password;
+
+        $user = User::where('pass',$request->password)->first();
+
+        if($user)
+        {
+            // Session::put('user',$user);
+            Auth::login($user);
+            // return route('home');
+        }else{
+            return redirect()->back();
+        }
+        // if ($password === "your-predefined-password") {
+        //   $user = User::findOrFail(1); // The ID of the only user in the system
+
+        //   Auth::login($user); // Log the user in
+
+        //   // Redirect somewhere
+        //   return redirect()->intended('dashboard');
+        // }
+
+        // // If the password didn't match, redirect back the the login page
+        // return redirect('login')->with('error', 'Wrong password!');
     }
 }

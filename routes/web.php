@@ -24,29 +24,35 @@ use App\Http\Controllers\OrderController;
 // });
 Auth::routes();
 
-// Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home', [UserController::class, 'index'])->name('user');
-Route::get('/shopping', [UserController::class, 'shopping'])->name('shopping');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::post('login-user', [UserController::class, 'login'])->name('login-user');
+    Route::get('/home', [UserController::class, 'index'])->name('user');
+    Route::get('/shopping', [UserController::class, 'shopping'])->name('shopping');
 
-Route::get('market', [UserController::class, 'market'])->name('market');
-Route::get('order', [UserController::class, 'order'])->name('order');
+    Route::get('market', [UserController::class, 'market'])->name('market');
+    Route::get('order', [UserController::class, 'order'])->name('order');
 
+
+    
+
+    Route::resource('product', ProductController::class);
+    Route::resource('order', OrderController::class);
+    Route::resource('admin-order', AdminOrderController::class);
+
+    Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin');
+    Route::post('/order/delivery/{id}', [AdminOrderController::class, 'delivery'])->name('delivery');
+    Route::post('/order/cashback/{id}', [AdminOrderController::class, 'cashback'])->name('cashback');
+
+});
+});
 
 Route::post('/name-etap', [UserController::class, 'nameEtap'])->name('name-etap');
-Route::post('/date-etap', [UserController::class, 'dateEtap'])->name('date-etap');
-Route::post('/phone-etap', [UserController::class, 'phoneEtap'])->name('phone-etap');
-Route::post('/code-etap', [UserController::class, 'codeEtap'])->name('code-etap');
-Route::post('/parol-etap', [UserController::class, 'parolEtap'])->name('parol-etap');
-Route::post('/map-etap', [UserController::class, 'mapEtap'])->name('map-etap');
-
-Route::resource('product', ProductController::class);
-Route::resource('order', OrderController::class);
-Route::resource('admin-order', AdminOrderController::class);
-
-Route::prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin');
-});
-// });
+    Route::post('/date-etap', [UserController::class, 'dateEtap'])->name('date-etap');
+    Route::post('/phone-etap', [UserController::class, 'phoneEtap'])->name('phone-etap');
+    Route::post('/code-etap', [UserController::class, 'codeEtap'])->name('code-etap');
+    Route::post('/parol-etap', [UserController::class, 'parolEtap'])->name('parol-etap');
+    Route::post('/map-etap', [UserController::class, 'mapEtap'])->name('map-etap');
 
