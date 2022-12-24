@@ -1,7 +1,7 @@
 <header class="header">
     <div class="row" style="flex-wrap: inherit">
         <div class="col-md-2" style="width: 30%;">
-            <img src="{{asset('mobile/logo.png')}}" height="30px" alt="">
+            <a href="/"><img src="{{asset('mobile/logo.png')}}" height="30px" alt=""></a>
         </div>
         <div class="col-md-4">
             <div class="input-group">
