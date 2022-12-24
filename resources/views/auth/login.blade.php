@@ -201,15 +201,15 @@
               </div>
         </div>
         <div class="card-body map-etap d-none">
+            <div class="form-group text-center mt-5">
+                <label for="exampleInputPassword1">Dorixonangiz nomini kiriting</label>
+                <input type="text" name="pharmacy" class="form-control" value="@if(Session::get('pharmacy')) {{Session::get('pharmacy')}} @endif" id="exampleInputPassword1" placeholder="Familiyangizni kiriting..">
+                </div>
             <div class="form-group text-center">
                 <label for="exampleInputPassword1">Joylashuv joyingizni belgilang</label>
                <div id="map" style="height: 300px"></div>  
                <input type="text" name="lat" class="d-none">
                <input type="text" name="long" class="d-none">  
-            </div>
-            <div class="form-group text-center mt-5">
-            <label for="exampleInputPassword1">Dorixonangiz nomini kiriting</label>
-            <input type="text" name="pharmacy" class="form-control" value="@if(Session::get('pharmacy')) {{Session::get('pharmacy')}} @endif" id="exampleInputPassword1" placeholder="Familiyangizni kiriting..">
             </div>
         </div>
         </form>
