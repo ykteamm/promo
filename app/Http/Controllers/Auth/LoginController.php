@@ -13,7 +13,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\JsonResponse;
-
+use Session;
+use App\Models\User;
 class LoginController extends Controller
 {
     /*
@@ -43,7 +44,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        // $this->middleware('guest')->except('logout');
     }
 
     public function showLoginForm()
@@ -61,9 +62,20 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        // return $request;
         // die();
+        // $user = User::where('pass',$request->password)->first();
+
+        // if($user)
+        // {
+        //     Auth::login($user);
+        //     return route('home');
+
+        // }else{
+        //     return redirect()->back();
+        // }
+
         $this->validateLogin($request);
+        // return $request;
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and

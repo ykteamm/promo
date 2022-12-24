@@ -6,7 +6,7 @@
     <div class="container bg-default-light mb-4 py-3 overflow-auto" >
         
         <div class="row">
-            <form action="{{route('order.store')}}" method="POST" style="display: flex !important;" id="myForm">
+            <form action="{{route('order.store')}}" method="POST" style="display: contents !important;" id="myForm">
                 @csrf
             @foreach ($products as $item)
             
@@ -23,7 +23,7 @@
                     <div class="card-body ">
                         {{-- <p class="mb-0"><small class="text-secondary">Rockstar</small></p> --}}
                         <a href="product.html">
-                            <p class="mb-0">{{$item->name}} {{Session::get('user')->id}}</p>
+                            <p class="mb-0">{{$item->name}}</p>
                         </a>
                         <a href="product.html">
                             <p class="mb-0"><span class="product-price{{$item->id}}">{{$item->price}}</span></p>

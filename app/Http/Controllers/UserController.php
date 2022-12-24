@@ -124,7 +124,7 @@ class UserController extends Controller
 
         // return $request;
         $user = User::create([
-            'first_name' => Session::get('name_etap'),
+            'first_name' => Session::get('first_name'),
             'last_name' => Session::get('last_name'),
             'birth_date' => Session::get('year').'-'.Session::get('month').'-'.Session::get('day'),
             'phone_number' => Session::get('phone'),

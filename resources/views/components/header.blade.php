@@ -1,7 +1,7 @@
 <header class="header">
     <div class="row" style="flex-wrap: inherit">
         <div class="col-md-2" style="width: 30%;">
-            PROMO
+            <img src="{{asset('mobile/logo.png')}}" height="30px" alt="">
         </div>
         <div class="col-md-4">
             <div class="input-group">
