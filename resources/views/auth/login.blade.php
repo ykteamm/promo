@@ -216,7 +216,7 @@
         </form>
         
     </div> 
-    <div class="card-body bottom-footer">
+    <div class="card-body">
 
         <div class="social-auth-links text-center mt-2 mb-3 name-etap">
             <button type="submit" onclick="nameEtap()" class="btn btn-block btn-primary">Keyingisi</button>
