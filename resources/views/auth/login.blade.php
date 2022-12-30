@@ -294,7 +294,7 @@
             </div>
             
         </div> 
-        <div class="card-body bottom-footer">
+        <div class="card-body">
             <div class="social-auth-links text-center mt-2 mb-3">
                 <button type="button" onclick="login()" class="btn btn-block btn-primary">Kirish</button>
             </div>
