@@ -64,31 +64,39 @@ class UserController extends Controller
         
         $number = preg_replace("/[^0-9]/", '', $request->phone);
 
-        $x = 4; // Amount of digits
-        $min = pow(10,$x);
-        $max = pow(10,$x+1)-1;
-        $value = rand($min, $max);
+        $phone = User::where('phone_number',$number)->first();
+        if($phone)
+        {
+            return [
+                'status' => 505,
+            ];
+        }else{
+            $x = 4; // Amount of digits
+            $min = pow(10,$x);
+            $max = pow(10,$x+1)-1;
+            $value = rand($min, $max);
 
-        $response = Http::post('notify.eskiz.uz/api/auth/login', [
-            'email' => 'mubashirov2002@gmail.com',
-            'password' => 'PM4g0AWXQxRg0cQ2h4Rmn7Ysoi7IuzyMyJ76GuJa'
-        ]);
-        $token = $response['data']['token'];
+            $response = Http::post('notify.eskiz.uz/api/auth/login', [
+                'email' => 'mubashirov2002@gmail.com',
+                'password' => 'PM4g0AWXQxRg0cQ2h4Rmn7Ysoi7IuzyMyJ76GuJa'
+            ]);
+            $token = $response['data']['token'];
 
-        $sms = Http::withToken($token)->post('notify.eskiz.uz/api/message/sms/send', [
-            'mobile_phone' => '998'.$number,
-            'message' => 'Tasdiqlash kodi - '.$value,
-            'from' => '4546',
-            'callback_url' => 'http://0000.uz/test.php'
-        ]);
+            $sms = Http::withToken($token)->post('notify.eskiz.uz/api/message/sms/send', [
+                'mobile_phone' => '998'.$number,
+                'message' => 'Tasdiqlash kodi - '.$value,
+                'from' => '4546',
+                'callback_url' => 'http://0000.uz/test.php'
+            ]);
 
-        Session::put('phone',$number);
-        Session::put('code',$value);
-        Session::put('phone_etap',200);
-        return [
-            'status' => 200,
-            'code' => $value,
-        ];
+            Session::put('phone',$number);
+            Session::put('code',$value);
+            Session::put('phone_etap',200);
+            return [
+                'status' => 200,
+                'code' => $value,
+            ];
+        }
     }
 
     public function codeEtap(Request $request)

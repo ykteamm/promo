@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
         
-  <title>AdminLTE 3 | Log in (v2)</title>
+  <title>Promo Novatio</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="{{asset('promo/plugins/fontawesome-free/css/all.min.css')}}">

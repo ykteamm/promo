@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
         
-  <title>AdminLTE 3 | Log in (v2)</title>
+  <title> Promo Novatio</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="{{asset('promo/plugins/fontawesome-free/css/all.min.css')}}">
@@ -203,11 +203,12 @@
         <div class="card-body map-etap d-none">
             <div class="form-group text-center mt-5">
                 <label for="exampleInputPassword1">Dorixonangiz nomini kiriting</label>
-                <input type="text" name="pharmacy" class="form-control" value="@if(Session::get('pharmacy')) {{Session::get('pharmacy')}} @endif" id="exampleInputPassword1" placeholder="Familiyangizni kiriting..">
+                <input type="text" name="pharmacy" class="form-control" value="@if(Session::get('pharmacy')) {{Session::get('pharmacy')}} @endif" id="exampleInputPassword1" placeholder="Dorixonangiz nomini kiriting..">
                 </div>
             <div class="form-group text-center">
                 <label for="exampleInputPassword1">Joylashuv joyingizni belgilang</label>
-               <div id="map" style="height: 300px"></div>  
+                <div class="after-delete-map"></div>
+                <div id="map" style="height: 300px" class="mapping"></div>  
                <input type="text" name="lat" class="d-none">
                <input type="text" name="long" class="d-none">  
             </div>
@@ -260,11 +261,15 @@
         </div>
     </div>
     </div>
-    <div class="login-user d-none" style="margin-top:40%;">
+    <div class="login-user d-none" style="margin-top:20%;">
         <form action="{{route('login')}}" method="POST" id="loginForm">
             @csrf
         <div class="card card-primary mt-5">
-            
+            <div class="card-body">
+                <h3 class="text-center" class="retape-text d-none">
+                    Telefon raqamingiz ro'yhatdan o'tgan.
+                </h3>
+            </div>
             <div class="card-body">
                 <div class="form-group text-center">
                     <label>Telefon raqamingizni kiriting</label>
@@ -412,6 +417,11 @@
                                 $('.for-kod-etap').addClass('d-none');
                                 $('.kod-etap').removeClass('d-none');
                             }
+                            if(response.status == 505){
+                                $('.register-user').addClass('d-none');
+                                $('.login-user').removeClass('d-none');
+                                $('.retape-text').removeClass('d-none');
+                            }
                         }
                 });
             }
@@ -473,6 +483,9 @@
                                 $('.map-etap-last').removeClass('d-none');
                                 $('.parol-etap').addClass('d-none');
                                 $('.phone-etap-last').addClass('d-none');
+                  
+                                $('.mapping').remove();
+                                $('.after-delete-map').after('<div id="map" style="height: 300px"></div>');
                                 ymaps.ready(init);
 
                                 function init() {

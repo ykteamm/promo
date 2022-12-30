@@ -97,7 +97,10 @@
             </li>
         </ul>
         <div class="text-center">
-            <a href="login.html" class="btn btn-outline-danger text-white rounded my-3 mx-auto">Sign out</a>
+            <form action="{{route('logout')}}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-outline-danger text-white rounded my-3 mx-auto">Chiqish</button>
+            </form>
         </div>
     </div>
 </div>
