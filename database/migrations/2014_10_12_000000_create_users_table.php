@@ -24,8 +24,8 @@ class CreateUsersTable extends Migration
             $table->string('phone_number');
             $table->string('password');
             $table->string('pass');
-            $table->integer('account')->default(0);
-            $table->integer('cashback')->default(0);
+            $table->double('account',8,2)->default(0);
+            $table->double('cashback',8,2)->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -7,7 +7,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShopProductController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ShopOrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,14 +33,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [UserController::class, 'index'])->name('user');
     Route::get('/shopping', [UserController::class, 'shopping'])->name('shopping');
 
-    Route::get('market', [UserController::class, 'market'])->name('market');
-    Route::get('order', [UserController::class, 'order'])->name('order');
+    Route::get('reyting', [UserController::class, 'reyting'])->name('reyting');
 
 
     
 
     Route::resource('product', ProductController::class);
+    Route::resource('shop-product', ShopProductController::class);
     Route::resource('order', OrderController::class);
+    Route::resource('shop-order', ShopOrderController::class);
     Route::resource('admin-order', AdminOrderController::class);
 
     Route::prefix('admin')->group(function () {

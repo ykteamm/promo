@@ -38,7 +38,15 @@
                 <a class="nav-link" href="{{route('product.index')}}">
                     <div>
                         <span class="material-icons icon">insert_chart</span>
-                        Mahsulot
+                        Dori Mahsulotlari
+                    </div>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('shop-product.index')}}">
+                    <div>
+                        <span class="material-icons icon">insert_chart</span>
+                        Market Mahsulotlari
                     </div>
                 </a>
             </li>

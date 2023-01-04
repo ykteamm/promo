@@ -50,256 +50,257 @@
             </div>
             <div class="col-lg-6 col-6">
                 <div class="social-auth-links text-center mt-2 mb-3">
-                    <a onclick="userLogin()" class="btn btn-block btn-primary user-login">
+                    <a onclick="userLogin()" class="btn btn-block btn-primary @if (Session::has('user')) d-none @endif user-login">
                     Kirish
                     </a>
-                    <a onclick="userRegister()" class="btn btn-block btn-primary d-none user-register">
+                    <a onclick="userRegister()" class="btn btn-block btn-primary @if (!Session::has('user')) d-none @endif user-register">
                     Registratsiya
                     </a>
                 </div>
             </div>
         </div> 
     
-    <div class="register-user">
-    <div class="mb-3 mt-5">
-        <div class="text-center">
-        <a href="../../index2.html" class="h1"><b>Ro'yhatdan otish</b></a>
-        </div>
-    </div>
-
-    <div class="card card-primary mt-5">
-        <form>
-        <div class="card-body name-etap">
-            <div class="form-group text-center">
-            <label for="exampleInputEmail1">Ismingiz</label>
-            <input type="text" name="first_name" class="form-control" value="@if(Session::get('first_name')) {{Session::get('first_name')}} @endif" id="exampleInputEmail1" placeholder="Ismingizni kiriting..">
-            </div>
-            <div class="form-group text-center mt-5">
-            <label for="exampleInputPassword1">Familiyangiz</label>
-            <input type="text" name="last_name" class="form-control" value="@if(Session::get('last_name')) {{Session::get('last_name')}} @endif" id="exampleInputPassword1" placeholder="Familiyangizni kiriting..">
+    <div class="register-user @if (Session::has('user')) d-none @endif">
+        <div class="mb-3 mt-5">
+            <div class="text-center">
+            <a href="../../index2.html" class="h1"><b>Ro'yhatdan otish</b></a>
             </div>
         </div>
-        <div class="card-body date-etap d-none">
-            <div class="row">
-                <div class="col-lg-4 col-4 text-center">
-                    <div class="form-group">
-                      <label>Yil</label>
-                      <select class="form-control select2" style="width: 100%;" name="year">
-                        @if(!Session::get('year')) 
-                            <option disabled selected hidden></option>
-                        @endif
-                        @for ($i = 2004; $i > 1950; $i--)
-                        @if(Session::get('year') == $i) 
-                            <option selected>{{$i}}</option>
-                        @else
-                            <option>{{$i}}</option>
-                        @endif
-                        @endfor
-                      </select>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-4 text-center">
-                    <div class="form-group">
-                      <label>Oy</label>
-                      <select class="form-control select2" style="width: 100%;" name="month">
-                        <option disabled selected hidden></option>
-                        @for ($i = 1; $i <= 12; $i++)
-                            @if(strlen($i) == 1)
-                            {
-                                @if(Session::get('month') == '0'.$i) 
-                                    <option selected>0{{$i}}</option>
-                                @else
-                                    <option>0{{$i}}</option>
-                                @endif
-                            }
-                            @else
-                                @if(Session::get('month') == $i) 
-                                    <option selected>{{$i}}</option>
-                                @else
-                                    <option>{{$i}}</option>
-                                @endif
-                            @endif
-                        @endfor
-                      </select>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-4 text-center">
-                    <div class="form-group">
-                      <label>Kun</label>
-                      <select class="form-control select2" style="width: 100%;" name="day">
-                        <option disabled selected hidden></option>
-                        @for ($i = 1; $i <= 31; $i++)
-                            @if(strlen($i) == 1)
-                            {
-                                @if(Session::get('day') == '0'.$i) 
-                                    <option selected>0{{$i}}</option>
-                                @else
-                                    <option>0{{$i}}</option>
-                                @endif
-                            }
-                            @else
-                                @if(Session::get('day') == $i) 
-                                    <option selected>{{$i}}</option>
-                                @else
-                                    <option>{{$i}}</option>
-                                @endif
-                            @endif
-                        @endfor
-                      </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card-body phone-etap d-none ">
-            @if(!Session::get('code_etap'))
-            <div class="form-group text-center">
-                <label class="first-phone-text">Telefon raqamingizni kiriting</label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                  </div>
-                  <input type="text" class="form-control" data-inputmask='"mask": "(99) 999-99-99"' data-mask name="phone">
-                </div>
 
-                <div class="form-group text-center mt-3 d-none done-code-etap">
-                    <div class="social-auth-links text-center mt-2 mb-3">
-                        <button type="submit" class="btn btn-block btn-outline-success phone-number"></button>
-                    </div>
-                </div> 
-
-                <div class="form-group text-center mt-5 d-none kod-etap">
-                    <label for="exampleInputEmail1">Kodni tasdiqlang</label>
-                    <input type="number" class="form-control" id="exampleInputEmail1" name="code">
-                </div>
-                <div class="form-group text-center mt-3 d-none retry-etap">
-                    <div class="social-auth-links text-center mt-2 mb-3">
-                        <button type="submit" onclick="phoneEtap()" class="btn btn-block btn-danger">Tog'ri kelmadi qayta yuboring</button>
-                    </div>
-                </div>
-            </div>
-            @else
-              <div class="form-group text-center">
-                <label class="first-phone-text">Telefon raqamingiz tasqidlangan</label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                  </div>
-                  <input type="text" class="form-control" data-inputmask='"mask": "(99) 999-99-99"' data-mask name="phone" value="{{Session::get('phone')}}">
-                </div>
-              </div>
-            @endif
-        </div>
-        <div class="card-body parol-etap d-none">
-            <div class="form-group text-center">
-                <label>Parol kiriting</label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-eye"></i></span>
-                  </div>
-                  <input type="password" class="form-control" min="4" name="password">
-                </div> 
-              </div>
-        </div>
-        <div class="card-body map-etap d-none">
-            <div class="form-group text-center mt-5">
-                <label for="exampleInputPassword1">Dorixonangiz nomini kiriting</label>
-                <input type="text" name="pharmacy" class="form-control" value="@if(Session::get('pharmacy')) {{Session::get('pharmacy')}} @endif" id="exampleInputPassword1" placeholder="Dorixonangiz nomini kiriting..">
-                </div>
-            <div class="form-group text-center">
-                <label for="exampleInputPassword1">Joylashuv joyingizni belgilang</label>
-                <div class="after-delete-map"></div>
-                <div id="map" style="height: 300px" class="mapping"></div>  
-               <input type="text" name="lat" class="d-none">
-               <input type="text" name="long" class="d-none">  
-            </div>
-        </div>
-        </form>
-        
-    </div> 
-    <div class="card-body">
-
-        <div class="social-auth-links text-center mt-2 mb-3 name-etap">
-            <button type="submit" onclick="nameEtap()" class="btn btn-block btn-primary">Keyingisi</button>
-        </div>
-        <div class="social-auth-links text-center mt-2 mb-3 d-none date-etap">
-            <button type="submit" onclick="dateEtap()" class="btn btn-block btn-primary">Keyingisi</button>
-        </div>
-        
-        <div class="social-auth-links text-center mt-2 mb-3 d-none phone-etap for-kod-etap">
-            <button type="submit" onclick="phoneEtap()" class="btn btn-block btn-primary">Kodni yuborish</button>
-        </div>
-
-        <div class="social-auth-links text-center mt-2 mb-3 d-none next-etap">
-            <button type="submit" onclick="nextEtap()" class="btn btn-block btn-primary">Keyingisi</button>
-        </div>
-
-        <div class="social-auth-links text-center mt-2 mb-3 d-none kod-etap">
-            <button type="submit" onclick="kodEtap()" class="btn btn-block btn-primary">Kodni tasdiqlash</button>
-        </div>
-
-        <div class="social-auth-links text-center mt-2 mb-3 d-none parol-etap">
-            <button type="submit" onclick="parolEtap()" class="btn btn-block btn-primary">Keyingisi</button>
-        </div>
-
-        <div class="social-auth-links text-center mt-2 mb-3 d-none map-etap">
-            <button type="submit" onclick="mapEtap()" class="btn btn-block btn-primary">Tugatish</button>
-        </div>
-
-        <div class="social-auth-links text-center mt-2 mb-3 d-none name-etap-last">
-            <button type="submit" onclick="nameEtapLast()" class="btn btn-block btn-primary">Orqaga</button>
-        </div>
-        <div class="social-auth-links text-center mt-2 mb-3 d-none date-etap-last">
-            <button type="submit" onclick="dateEtapLast()" class="btn btn-block btn-primary">Orqaga</button>
-        </div>
-
-        <div class="social-auth-links text-center mt-2 mb-3 d-none phone-etap-last">
-            <button type="submit" onclick="phoneEtapLast()" class="btn btn-block btn-primary">Orqaga</button>
-        </div>
-
-        <div class="social-auth-links text-center mt-2 mb-3 d-none map-etap-last">
-            <button type="submit" onclick="mapEtapLast()" class="btn btn-block btn-primary">Orqaga</button>
-        </div>
-    </div>
-    </div>
-    <div class="login-user d-none" style="margin-top:20%;">
-        <form action="{{route('login')}}" method="POST" id="loginForm">
-            @csrf
         <div class="card card-primary mt-5">
-            <div class="card-body">
-                <h3 class="text-center" class="retape-text d-none">
-                    Telefon raqamingiz ro'yhatdan o'tgan.
-                </h3>
-            </div>
-            <div class="card-body">
+            <form>
+            <div class="card-body name-etap">
                 <div class="form-group text-center">
-                    <label>Telefon raqamingizni kiriting</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                <label for="exampleInputEmail1">Ismingiz</label>
+                <input type="text" name="first_name" class="form-control" value="@if(Session::get('first_name')) {{Session::get('first_name')}} @endif" id="exampleInputEmail1" placeholder="Ismingizni kiriting..">
+                </div>
+                <div class="form-group text-center mt-5">
+                <label for="exampleInputPassword1">Familiyangiz</label>
+                <input type="text" name="last_name" class="form-control" value="@if(Session::get('last_name')) {{Session::get('last_name')}} @endif" id="exampleInputPassword1" placeholder="Familiyangizni kiriting..">
+                </div>
+            </div>
+            <div class="card-body date-etap d-none">
+                <div class="row">
+                    <div class="col-lg-4 col-4 text-center">
+                        <div class="form-group">
+                        <label>Yil</label>
+                        <select class="form-control select2" style="width: 100%;" name="year">
+                            @if(!Session::get('year')) 
+                                <option disabled selected hidden></option>
+                            @endif
+                            @for ($i = 2004; $i > 1950; $i--)
+                            @if(Session::get('year') == $i) 
+                                <option selected>{{$i}}</option>
+                            @else
+                                <option>{{$i}}</option>
+                            @endif
+                            @endfor
+                        </select>
                         </div>
-                        <input type="text" class="form-control delete-input" data-inputmask='"mask": "(99) 999-99-99"' data-mask>
-                        <input type="text" class="form-control d-none login-input" name="phone_number">
                     </div>
-                  </div>
-                  <div class="form-group text-center">
+                    <div class="col-lg-4 col-4 text-center">
+                        <div class="form-group">
+                        <label>Oy</label>
+                        <select class="form-control select2" style="width: 100%;" name="month">
+                            <option disabled selected hidden></option>
+                            @for ($i = 1; $i <= 12; $i++)
+                                @if(strlen($i) == 1)
+                                {
+                                    @if(Session::get('month') == '0'.$i) 
+                                        <option selected>0{{$i}}</option>
+                                    @else
+                                        <option>0{{$i}}</option>
+                                    @endif
+                                }
+                                @else
+                                    @if(Session::get('month') == $i) 
+                                        <option selected>{{$i}}</option>
+                                    @else
+                                        <option>{{$i}}</option>
+                                    @endif
+                                @endif
+                            @endfor
+                        </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-4 text-center">
+                        <div class="form-group">
+                        <label>Kun</label>
+                        <select class="form-control select2" style="width: 100%;" name="day">
+                            <option disabled selected hidden></option>
+                            @for ($i = 1; $i <= 31; $i++)
+                                @if(strlen($i) == 1)
+                                {
+                                    @if(Session::get('day') == '0'.$i) 
+                                        <option selected>0{{$i}}</option>
+                                    @else
+                                        <option>0{{$i}}</option>
+                                    @endif
+                                }
+                                @else
+                                    @if(Session::get('day') == $i) 
+                                        <option selected>{{$i}}</option>
+                                    @else
+                                        <option>{{$i}}</option>
+                                    @endif
+                                @endif
+                            @endfor
+                        </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body phone-etap d-none ">
+                @if(!Session::get('code_etap'))
+                <div class="form-group text-center">
+                    <label class="first-phone-text">Telefon raqamingizni kiriting</label>
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    </div>
+                    <input type="text" class="form-control" data-inputmask='"mask": "(99) 999-99-99"' data-mask name="phone">
+                    </div>
+
+                    <div class="form-group text-center mt-3 d-none done-code-etap">
+                        <div class="social-auth-links text-center mt-2 mb-3">
+                            <button type="submit" class="btn btn-block btn-outline-success phone-number"></button>
+                        </div>
+                    </div> 
+
+                    <div class="form-group text-center mt-5 d-none kod-etap">
+                        <label for="exampleInputEmail1">Kodni tasdiqlang</label>
+                        <input type="number" class="form-control" id="exampleInputEmail1" name="code">
+                    </div>
+                    <div class="form-group text-center mt-3 d-none retry-etap">
+                        <div class="social-auth-links text-center mt-2 mb-3">
+                            <button type="submit" onclick="phoneEtap()" class="btn btn-block btn-danger">Tog'ri kelmadi qayta yuboring</button>
+                        </div>
+                    </div>
+                </div>
+                @else
+                <div class="form-group text-center">
+                    <label class="first-phone-text">Telefon raqamingiz tasqidlangan</label>
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    </div>
+                    <input type="text" class="form-control" data-inputmask='"mask": "(99) 999-99-99"' data-mask name="phone" value="{{Session::get('phone')}}">
+                    </div>
+                </div>
+                @endif
+            </div>
+            <div class="card-body parol-etap d-none">
+                <div class="form-group text-center">
                     <label>Parol kiriting</label>
                     <div class="input-group">
-                      <div class="input-group-prepend">
+                    <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-eye"></i></span>
-                      </div>
-                      <input type="password" class="form-control" min="4" name="password">
+                    </div>
+                    <input type="password" class="form-control" min="4" name="password">
                     </div> 
-                  </div>
-                  
+                </div>
             </div>
+            <div class="card-body map-etap d-none">
+                <div class="form-group text-center mt-5">
+                    <label for="exampleInputPassword1">Dorixonangiz nomini kiriting</label>
+                    <input type="text" name="pharmacy" class="form-control" value="@if(Session::get('pharmacy')) {{Session::get('pharmacy')}} @endif" id="exampleInputPassword1" placeholder="Dorixonangiz nomini kiriting..">
+                    </div>
+                <div class="form-group text-center">
+                    <label for="exampleInputPassword1">Joylashuv joyingizni belgilang</label>
+                    <div class="after-delete-map"></div>
+                    <div id="map" style="height: 300px" class="mapping"></div>  
+                <input type="text" name="lat" class="d-none">
+                <input type="text" name="long" class="d-none">  
+                </div>
+            </div>
+            </form>
             
         </div> 
         <div class="card-body">
-            <div class="social-auth-links text-center mt-2 mb-3">
-                <button type="button" onclick="login()" class="btn btn-block btn-primary">Kirish</button>
+
+            <div class="social-auth-links text-center mt-2 mb-3 name-etap">
+                <button type="submit" onclick="nameEtap()" class="btn btn-block btn-primary">Keyingisi</button>
+            </div>
+            <div class="social-auth-links text-center mt-2 mb-3 d-none date-etap">
+                <button type="submit" onclick="dateEtap()" class="btn btn-block btn-primary">Keyingisi</button>
+            </div>
+            
+            <div class="social-auth-links text-center mt-2 mb-3 d-none phone-etap for-kod-etap">
+                <button type="submit" onclick="phoneEtap()" class="btn btn-block btn-primary">Kodni yuborish</button>
+            </div>
+
+            <div class="social-auth-links text-center mt-2 mb-3 d-none next-etap">
+                <button type="submit" onclick="nextEtap()" class="btn btn-block btn-primary">Keyingisi</button>
+            </div>
+
+            <div class="social-auth-links text-center mt-2 mb-3 d-none kod-etap">
+                <button type="submit" onclick="kodEtap()" class="btn btn-block btn-primary">Kodni tasdiqlash</button>
+            </div>
+
+            <div class="social-auth-links text-center mt-2 mb-3 d-none parol-etap">
+                <button type="submit" onclick="parolEtap()" class="btn btn-block btn-primary">Keyingisi</button>
+            </div>
+
+            <div class="social-auth-links text-center mt-2 mb-3 d-none map-etap">
+                <button type="submit" onclick="mapEtap()" class="btn btn-block btn-primary">Tugatish</button>
+            </div>
+
+            <div class="social-auth-links text-center mt-2 mb-3 d-none name-etap-last">
+                <button type="submit" onclick="nameEtapLast()" class="btn btn-block btn-primary">Orqaga</button>
+            </div>
+            <div class="social-auth-links text-center mt-2 mb-3 d-none date-etap-last">
+                <button type="submit" onclick="dateEtapLast()" class="btn btn-block btn-primary">Orqaga</button>
+            </div>
+
+            <div class="social-auth-links text-center mt-2 mb-3 d-none phone-etap-last">
+                <button type="submit" onclick="phoneEtapLast()" class="btn btn-block btn-primary">Orqaga</button>
+            </div>
+
+            <div class="social-auth-links text-center mt-2 mb-3 d-none map-etap-last">
+                <button type="submit" onclick="mapEtapLast()" class="btn btn-block btn-primary">Orqaga</button>
             </div>
         </div>
-    </form>
+    </div>
+
+    <div class="login-user @if (!Session::has('user')) d-none @endif" style="margin-top:20%;">
+        <form action="{{route('login')}}" method="POST" id="loginForm">
+            @csrf
+            <div class="card card-primary mt-5">
+                <div class="card-body retape-text d-none">
+                    <h3 class="text-center">
+                        Telefon raqamingiz ro'yhatdan o'tgan.
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group text-center">
+                        <label>Telefon raqamingizni kiriting</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            </div>
+                            <input type="text" class="form-control delete-input" data-inputmask='"mask": "(99) 999-99-99"' data-mask>
+                            <input type="text" class="form-control d-none login-input" name="phone_number">
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <label>Parol kiriting</label>
+                        <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-eye"></i></span>
+                        </div>
+                        <input type="password" class="form-control" min="4" name="password">
+                        </div> 
+                    </div>
+                    
+                </div>
+                
+            </div> 
+            <div class="card-body">
+                <div class="social-auth-links text-center mt-2 mb-3">
+                    <button type="button" onclick="login()" class="btn btn-block btn-primary">Kirish</button>
+                </div>
+            </div>
+        </form>
 
     </div>
     
@@ -418,8 +419,12 @@
                                 $('.kod-etap').removeClass('d-none');
                             }
                             if(response.status == 505){
+                                // $('.register-user').addClass('d-none');
+                                // $('.login-user').removeClass('d-none');
                                 $('.register-user').addClass('d-none');
+                                $('.user-login').addClass('d-none');
                                 $('.login-user').removeClass('d-none');
+                                $('.user-register').removeClass('d-none');
                                 $('.retape-text').removeClass('d-none');
                             }
                         }
@@ -485,7 +490,7 @@
                                 $('.phone-etap-last').addClass('d-none');
                   
                                 $('.mapping').remove();
-                                $('.after-delete-map').after('<div id="map" style="height: 300px"></div>');
+                                $('.after-delete-map').after('<div id="map" style="height: 300px" class="mapping"></div>');
                                 ymaps.ready(init);
 
                                 function init() {

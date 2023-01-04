@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Stevebauman\Location\Facades\Location;
-use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -34,6 +33,12 @@ class UserController extends Controller
     public function shopping()
     {
         return view('user.shopping');
+    }
+
+    public function reyting()
+    {
+        $users = User::orderBy('cashback','DESC')->get();
+        return view('reyting',compact('users'));
     }
 
     public function nameEtap(Request $request)
@@ -154,10 +159,6 @@ class UserController extends Controller
             ];
 
         }
-    }
-    public function market()
-    {
-        return view('market');
     }
     public function login(Request $request)
     {

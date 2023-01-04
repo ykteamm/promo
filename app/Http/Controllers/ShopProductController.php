@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Order;
-use App\Models\OrderProduct;
-use App\Models\Product;
-use App\Models\User;
-class AdminOrderController extends Controller
+use App\Models\ShopProduct;
+
+class ShopProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +14,7 @@ class AdminOrderController extends Controller
      */
     public function index()
     {
-        $users = User::with('order','order.orderProduct','order.orderProduct.product')->get();
-        // return $users;
-        return view('admin.order.index',compact('users'));
+        return view('admin.shop-product.index');
     }
 
     /**
@@ -39,7 +35,23 @@ class AdminOrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $file = $request->file('image') ;
+            $imageName = time() . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path().'/images' ;
+
+            $inputs = $request->all();
+            $inputs['image'] = $imageName;
+            unset($inputs['_token']);
+            $products = new ShopProduct($inputs);
+            $products->save();
+            if($products->id)
+            {
+                $file->move($destinationPath,$imageName);
+                return redirect()->back();
+            }
+            else{
+                return redirect()->back();
+            }
     }
 
     /**
@@ -86,41 +98,4 @@ class AdminOrderController extends Controller
     {
         //
     }
-
-    public function delivery(Request $request, $id)
-    {
-        $update = Order::where('id',$id)->update([
-            'delivery' => 1
-        ]);
-
-        return redirect()->back();
-    }
-
-    public function cashback(Request $request, $id)
-    {
-        $orders = Order::with('orderProduct','orderProduct.product','user')->where('id',$id)->first();
-        $user_id = Order::where('id',$id)->value('user_id');
-
-        $bonus = 0;
-        foreach ($orders->orderProduct as $key => $value) {
-            $bonus += $value->product->bonus*$value->stock;
-        }
-
-
-        $user_account = User::where('id',$user_id)->value('account');
-        $user_cashback = User::where('id',$user_id)->value('cashback');
-
-        // return $user_account + $bonus/2000;
-
-        $users = User::where('id',$user_id)->update([
-            'account' => $user_account + $bonus/2,
-            'cashback' => $user_cashback + $bonus/2000,
-        ]);
-        $update = Order::where('id',$id)->update([
-            'cashback' => 1
-        ]);
-        return redirect()->back();
-    }
-
-
 }
