@@ -613,62 +613,89 @@
 
   });
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhaf1dM31SC1MV8cdYpbY2WlhHEhAFg4s"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhaf1dM31SC1MV8cdYpbY2WlhHEhAFg4s&libraries=places"></script>
     
     
     <script>
-        $(document).ready(function(){
-        let map, infoWindow;
-            initMap();
-            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-            infoWindow.setPosition(pos);
-            infoWindow.setContent(
-                browserHasGeolocation
-                ? "Error: The Geolocation service failed."
-                : "Error: Your browser doesn't support geolocation."
-            );
-            infoWindow.open(map);
-            }
-
-            window.initMap = initMap;
-        })
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 6,
-  });
-  infoWindow = new google.maps.InfoWindow();
-
-  const locationButton = document.createElement("button");
-
-  locationButton.textContent = "Pan to Current Location";
-  locationButton.classList.add("custom-map-control-button");
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-  locationButton.addEventListener("click", () => {
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-
-          infoWindow.setPosition(pos);
-          infoWindow.setContent("Location found.");
-          infoWindow.open(map);
-          map.setCenter(pos);
-        },
-        () => {
-          handleLocationError(true, infoWindow, map.getCenter());
+        var map;
+var myLatLng;
+$(document).ready(function() {
+    geoLocationInit();
+});
+    function geoLocationInit() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, fail);
+        } else {
+            alert("Browser not supported");
         }
-      );
-    } else {
-      // Browser doesn't support Geolocation
-      handleLocationError(false, infoWindow, map.getCenter());
     }
-  });
-}
+
+    function success(position) {
+        console.log(position);
+        var latval = position.coords.latitude;
+        var lngval = position.coords.longitude;
+        myLatLng = new google.maps.LatLng(latval, lngval);
+        createMap(myLatLng);
+        // nearbySearch(myLatLng, "school");
+        searchGirls(latval,lngval);
+    }
+
+    function fail() {
+        alert("it fails");
+    }
+    //Create Map
+    function createMap(myLatLng) {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 12
+        });
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map
+        });
+    }
+    //Create marker
+    function createMarker(latlng, icn, name) {
+        var marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            icon: icn,
+            title: name
+        });
+    }
+   
+    function searchGirls(lat,lng){
+        $.post('http://localhost/api/searchGirls',{lat:lat,lng:lng},function(match){
+            // console.log(match);
+            $('#girlsResult').html('');
+
+            $.each(match,function(i,val){
+                var glatval=val.lat;
+                var glngval=val.lng;
+                var gname=val.name;
+                var GLatLng = new google.maps.LatLng(glatval, glngval);
+                var gicn= 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+                createMarker(GLatLng,gicn,gname);
+                var html='<h5><li>'+gname+'</li></h5>';
+                $('#girlsResult').append(html);
+            });
+
+              // $.each(match, function(i, val) {
+              //   console.log(val.name);
+              // });
+        });
+    }
+
+    $('#searchGirls').submit(function(e){
+       e.preventDefault();
+        var val=$('#locationSelect').val();
+        $.post('http://localhost/api/getLocationCoords',{val:val},function(match){
+
+            var myLatLng = new google.maps.LatLng(match[0],match[1]);
+            createMap(myLatLng);
+            searchGirls(match[0],match[1]);
+        });
+    });
 
 
         </script>
