@@ -645,9 +645,19 @@ $(document).ready(function() {
     }
     //Create Map
     function createMap(myLatLng) {
+        
         map = new google.maps.Map(document.getElementById('map'), {
             center: myLatLng,
             zoom: 12
+        });
+        const locationButton = document.createElement("button");
+
+        locationButton.textContent = "Mening joylashuvim";
+        locationButton.classList.add("custom-map-control-button");
+        map.controls[google.maps.ControlPosition.LEFT_CENTER].push(locationButton);
+        locationButton.addEventListener("click", () => {
+            geoLocationInit();
+    
         });
         var marker = new google.maps.Marker({
             position: myLatLng,
