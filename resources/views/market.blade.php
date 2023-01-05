@@ -1,9 +1,26 @@
 @extends('layouts.app')
 @section('content')
     
-<div class="main-container overflow-auto">
-
-    <div class="container bg-default-light mb-4 py-3 overflow-auto" >
+<div class="overflow-auto">
+    <div class="list-group-item session-message" style="border-radius: 15px;">
+        <div class="row">
+            <div class="col-auto align-self-center">
+                <i class="material-icons text-default">check_circle</i>
+            </div>
+            <div class="col pl-0">
+                <div class="row mb-1">
+                    <div class="col">
+                        <p class="mb-0">Email Updated</p>
+                    </div>
+                    <div class="col-auto pl-0">
+                        <p class="small text-secondary">2/12/2020</p>
+                    </div>
+                </div>
+                <p class="small text-secondary">Your email change request has been successfully updated</p>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-4 py-3 overflow-auto" >
 
         <div class="row">
             @isset($products)
@@ -34,6 +51,16 @@
                                     {{$item->elexir}}
                                         <img src="{{asset('promo/dist/img/promo/eleksir3.png')}}" width="20px" alt="">
                                 </h5> --}}
+                                {{-- <div>
+                                    <button type="button" onclick="plus({{$item->id}})" class="btn btn-sm btn-primary">+</button>
+                                </div> --}}
+                                <div class="mt-1 text-center">
+                                    @if (Auth::user()->cashback >= $item->elexir )
+                                        <a href="{{route('product-shopping',$item->id)}}" type="button" class="btn btn-sm btn-primary">Sotib olish</a>
+                                    @else
+                                        <button type="button" class="btn btn-sm btn-danger">Sotib ololmaysiz eleksir kam</button>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

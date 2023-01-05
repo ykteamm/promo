@@ -34,7 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/shopping', [UserController::class, 'shopping'])->name('shopping');
 
     Route::get('reyting', [UserController::class, 'reyting'])->name('reyting');
+    Route::get('my-order', [UserController::class, 'myOrder'])->name('my-order');
+    Route::get('my-shop', [UserController::class, 'myShop'])->name('my-shop');
 
+    Route::get('product-shopping/{product_id}', [UserController::class, 'productShopping'])->name('product-shopping');
 
     
 

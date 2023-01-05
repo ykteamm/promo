@@ -6,30 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Support\Facades\Hash;
 use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-
-        // if(Session::get('name_etap') && Session::get('date_etap') && Session::get('phone_etap') && Session::get('code_etap') && Session::get('parol_etap'))
-        // {
-        //     User::create([
-        //         'first_name' => Session::get('name_etap'),
-        //         'last_name' => Session::get('last_name'),
-        //         'birth_date' => Session::get('year').'-'.Session::get('month').'-'.Session::get('day'),
-        //         'phone_number' => Session::get('phone'),
-        //         'password' => Hash::make(Session::get('password')),
-        //     ]);
-        //     return view('user.index');
-        // }else{
-        //     return route('user');
-        // }
-    }
-
     public function shopping()
     {
         return view('user.shopping');
@@ -40,7 +23,16 @@ class UserController extends Controller
         $users = User::orderBy('cashback','DESC')->get();
         return view('reyting',compact('users'));
     }
-
+    public function myOrder()
+    {
+        $user_id = Auth::user()->id;
+        $orders = Order::with('orderProduct','orderProduct.product')->where('user_id',$user_id)->orderBy('id','DESC')->get();
+        return view('user.my-order',compact('orders'));
+    }
+    public function productShopping($id)
+    {
+        return redirect()->back()->with('test','abs');
+    }
     public function nameEtap(Request $request)
     {
         Session::put('first_name',$request->first_name);
@@ -134,8 +126,6 @@ class UserController extends Controller
     }
     public function mapEtap(Request $request)
     {
-
-        // return $request;
         $user = User::create([
             'first_name' => Session::get('first_name'),
             'last_name' => Session::get('last_name'),

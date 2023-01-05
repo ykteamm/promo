@@ -11,7 +11,7 @@
 
 <!-- swiper CSS -->
 <link href="{{asset('mobile/vendor/swiper/css/swiper.min.css')}}" rel="stylesheet">
-
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <!-- Custom styles for this template -->
 <link href="{{asset('mobile/css/style.css')}}" rel="stylesheet" id="style">
 <style>

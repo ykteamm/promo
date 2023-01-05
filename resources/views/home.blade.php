@@ -17,9 +17,23 @@
     </div>
 </div>
 
-<div class="container text-center text-white" style="margin-top: 20%;">
+<div class="container text-center text-white mb-5" style="margin-top: 20%;">
     <h3 class="mb-1" style="font-family: Supercell-Magic">{{Auth::user()->last_name}} {{Auth::user()->first_name}}</h1>
     <h1 style="font-family: Supercell-Magic">{{ Auth::user()->pharmacy }}</h1>
+</div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-6">
+            <a href="{{'my-shop'}}">
+                <button class="btn btn-outline-warning px-2 btn-block rounded"><span class="material-icons mr-1">local_mall</span>Market</button>
+            </a>
+        </div>
+        <div class="col-6">
+            <a href="{{route('my-order')}}">
+                <button class="btn btn-outline-warning px-2 btn-block rounded"><span class="material-icons mr-1">shopping_cart</span>Buyurtma</button>
+            </a>
+        </div>
+    </div>
 </div>
 @endsection
 @section('scripts')
