@@ -10,7 +10,8 @@
                 <div class="card-header" id="headingThree">
                     <h2 class="mb-0">
                         <button class="btn btn-block text-left px-0 collapsed" type="button" data-toggle="collapse" data-target="#collapseThree{{$user->id}}" aria-expanded="false" aria-controls="collapseThree">
-                            {{$user->last_name}} {{$user->first_name}}
+                           <span style="font-size:24px;" class="mr-4">{{$user->pharmacy}}</span> 
+                           <span style="font-size:18px;">{{$user->last_name}} {{$user->first_name}}</span>
                         </button>
                     </h2>
                 </div>
@@ -39,7 +40,7 @@
                             </h2> --}}
                             <div class="row">
                                 <div class="col">
-                                    <button class="btn btn-block text-left px-0 collapsed" type="button" data-toggle="collapse" data-target="#collapseThreeOrder{{$order->id}}" aria-expanded="false" aria-controls="collapseThree">
+                                    <button class="btn btn-block btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseThreeOrder{{$order->id}}" aria-expanded="false" aria-controls="collapseThree">
                                         #order{{$order->sort}}
                                     </button>
 
@@ -74,32 +75,43 @@
                                     </div>
                                 </div>
                             </div>
+                            @php
+                                $sum = 0;
+                                $bonus = 0;
+                                foreach ($order->orderProduct as $o => $ord) {
+                                    $sum += $ord->product->price * $ord->stock;
+                                    $bonus += $ord->product->bonus * $ord->stock;
+                                }
+                            @endphp
+                            <div class="media mt-1">                            
+                                <div class="media-body">
+                                    <h6 class="mb-1 text-default">Buyurtma summasi</h6>
+                                    <p class="">{{$sum}} so'm</p>
+                                </div>
+                                <div class="media-body text-right">
+                                    <h6 class="mb-1 text-default">Buyurtma bonusi</h6>
+                                    <p class="">{{$bonus}} so'm</p>
+                                </div>
+                                {{-- <button class="btn btn-default btn-40 rounded-circle"><i class="material-icons">repeat</i></button>                             --}}
+                            </div>
                         </div>
                         <div id="collapseThreeOrder{{$order->id}}" class="collapse" aria-labelledby="headingThreeOrder" data-parent="#accordionExampleOrder">
                             <div class="card-body">
-                                <div class="card-body p-0">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">#</th>
-                                                        <th scope="col">Mahsulot</th>
-                                                        <th scope="col">Soni</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($order->orderProduct as $k => $orp)
-                                                    <tr>
-                                                        <th scope="row">{{$k+1}}</th>
-                                                        <th scope="row">{{$orp->product->name}}</th>
-                                                        <th scope="row">{{$orp->stock}}</th>
-                                                    </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                @foreach ($order->orderProduct as $o => $ord)
+                                <div class="media mb-1">
+                                    <div class="icon icon-60 mr-3 rounded">
+                                        <figure class="background">
+                                            <img src="{{asset('images/'.$ord->product->image)}}" alt="{{$ord->product->name}}">
+                                        </figure>
+                                    </div>
+                                    <div class="media-body">
+                                        {{-- <small class="text-secondary">Adididas</small> --}}
+                                        <h6 class="mb-1 text-default">{{$ord->product->name}} ({{$ord->stock}})</h6>
+                                        <span>Narxi: {{$ord->product->price}} x {{$ord->stock}} = {{$ord->product->price*$ord->stock}}</span>
+                                        <p>Bonus: {{$ord->product->bonus}} x {{$ord->stock}} = {{$ord->product->bonus*$ord->stock}}</p>
+                                    </div>
                                 </div>
-        
+                                @endforeach
                             </div>
                         </div>
                         </div>
