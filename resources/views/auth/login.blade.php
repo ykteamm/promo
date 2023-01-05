@@ -319,12 +319,12 @@
     ></script>
     
     <script>
-let map, infoWindow;
+        let map, infoWindow;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 6,
+    center: { lat: 55, lng: 34 },
+    zoom: 2,
   });
   infoWindow = new google.maps.InfoWindow();
 
@@ -369,8 +369,8 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.open(map);
 }
 
-window.initMap = initMap;
-      </script>
+window.initMap = initMap;    
+    </script>
 <script>
     function login()
     {
