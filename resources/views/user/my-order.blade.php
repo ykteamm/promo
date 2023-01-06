@@ -35,11 +35,11 @@
                             <div class="media">                            
                                 <div class="media-body">
                                     <h6 class="mb-1 text-default">Buyurtma summasi</h6>
-                                    <p class="">{{$sum}} so'm</p>
+                                    <p class="">{{number_format($sum,0,',',' ')}} so'm</p>
                                 </div>
                                 <div class="media-body">
                                     <h6 class="mb-1 text-default">Buyurtma bonusi</h6>
-                                    <p class="">{{$bonus}} so'm</p>
+                                    <p class="">{{number_format($sum,0,',',' ')}} so'm</p>
                                 </div>
                                 {{-- <button class="btn btn-default btn-40 rounded-circle"><i class="material-icons">repeat</i></button>                             --}}
                             </div>
@@ -58,8 +58,8 @@
                                     <div class="media-body">
                                         {{-- <small class="text-secondary">Adididas</small> --}}
                                         <h6 class="mb-1 text-default">{{$order->product->name}} ({{$order->stock}})</h6>
-                                        <span>Narxi: {{$order->product->price}} x {{$order->stock}} = {{$order->product->price*$order->stock}}</span>
-                                        <p>Bonus: {{$order->product->bonus}} x {{$order->stock}} = {{$order->product->bonus*$order->stock}}</p>
+                                        <span>Narxi: {{number_format($order->product->price,0,',',' ')}} x {{$order->stock}} = {{number_format($order->product->price*$order->stock,0,',',' ')}}</span>
+                                        <p>Bonus: {{number_format($order->product->bonus,0,',',' ')}} x {{$order->stock}} =  {{number_format($order->product->bonus*$order->stock,0,',',' ')}}</p>
                                     </div>
                                 </div>
                                 @endforeach

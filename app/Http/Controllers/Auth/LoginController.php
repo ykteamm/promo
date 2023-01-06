@@ -62,7 +62,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        // die();
+        
         // $user = User::where('pass',$request->password)->first();
 
         // if($user)

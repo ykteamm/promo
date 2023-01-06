@@ -33,7 +33,7 @@
                                 </div> --}}
                                 <div class="bottom-left m-2">
                                     <button class="btn btn-sm btn-default rounded">
-                                        {{$item->elexir}}
+                                        {{number_format($item->elexir,0,',',' ')}}
                                         <img src="{{asset('promo/dist/img/promo/eleksir3.png')}}" width="20px" alt="">
                                     </button>
 

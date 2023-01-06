@@ -31,6 +31,8 @@
   <link rel="stylesheet" href="{{asset('promo/plugins/dropzone/min/dropzone.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('promo/dist/css/adminlte.min.css')}}">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <style>
     .bottom-footer{
         bottom: 0;
@@ -78,6 +80,7 @@
                 <label for="exampleInputPassword1">Familiyangiz</label>
                 <input type="text" name="last_name" class="form-control" value="@if(Session::get('last_name')) {{Session::get('last_name')}} @endif" id="exampleInputPassword1" placeholder="Familiyangizni kiriting..">
                 </div>
+
             </div>
             <div class="card-body date-etap d-none">
                 <div class="row">
@@ -308,7 +311,8 @@
 
 
 
-<script src="https://api-maps.yandex.ru/2.1/?apikey=7a4a276f-4b19-448d-877b-1c87a0b350c3&lang=ru_RU" type="text/javascript"></script>
+{{-- <script src="https://api-maps.yandex.ru/2.1/?apikey=7a4a276f-4b19-448d-877b-1c87a0b350c3&lang=ru_RU" type="text/javascript"></script> --}}
+
 <script>
     function login()
     {
@@ -491,92 +495,15 @@
                   
                                 $('.mapping').remove();
                                 $('.after-delete-map').after('<div id="map" style="height: 300px" class="mapping"></div>');
-                                ymaps.ready(init);
 
-                                function init() {
-                                    var myPlacemark;
-                                    var geolocation = ymaps.geolocation;
-                                        myMap = new ymaps.Map('map', {
-                                            center: [55, 34],
-                                            zoom: 1
-                                        }, {
-                                            searchControlProvider: 'yandex#search'
-                                        });
+                                geoLocationInit();
 
-                                    // Сравним положение, вычисленное по ip пользователя и
-                                    // положение, вычисленное средствами браузера.
-                                        geolocation.get({
-                                            provider: 'yandex',
-                                            mapStateAutoApply: true
-                                        }).then(function (result) {
-                                            // Красным цветом пометим положение, вычисленное через ip.
-                                            result.geoObjects.options.set('preset', 'islands#redCircleIcon');
-                                            result.geoObjects.get(0).properties.set({
-                                                balloonContentBody: 'Мое местоположение'
-                                            });
-                                            $("input[name=lat]").val(result.geoObjects.position[0]);
-                                            $("input[name=long]").val(result.geoObjects.position[1]);
-                                            myMap.geoObjects.add(result.geoObjects);
-                                        });
-
-                                    geolocation.get({
-                                        provider: 'browser',
-                                        mapStateAutoApply: true
-                                    });
-                                    myMap.events.add('click', function (e) {
-                                        var coords = e.get('coords');
-                                        $("input[name=lat]").val(coords[0]);
-                                        $("input[name=long]").val(coords[1]);
-                                        // console.log(coords);
-                                        // Moving the placemark if it was already created
-                                        if (myPlacemark) {
-                                            myPlacemark.geometry.setCoordinates(coords);
-                                        }
-                                        // Otherwise, creating it.
-                                        else {
-                                            myPlacemark = createPlacemark(coords);
-                                            myMap.geoObjects.add(myPlacemark);
-                                            // Listening for the dragging end event on the placemark.
-                                            myPlacemark.events.add('dragend', function () {
-                                                getAddress(myPlacemark.geometry.getCoordinates());
-                                            });
-                                        }
-                                        getAddress(coords);
-                                    });
-                                    function createPlacemark(coords) {
-                                        return new ymaps.Placemark(coords, {
-                                            iconCaption: 'searching...'
-                                        }, {
-                                            preset: 'islands#violetDotIconWithCaption',
-                                            draggable: true
-                                        });
-                                    }
-
-                                    // Determining the address by coordinates (reverse geocoding).
-                                    function getAddress(coords) {
-                                        myPlacemark.properties.set('iconCaption', 'searching...');
-                                        ymaps.geocode(coords).then(function (res) {
-                                            var firstGeoObject = res.geoObjects.get(0);
-                                            myPlacemark.properties
-                                                .set({
-                                                    // Forming a string with the object's data.
-                                                    iconCaption: [
-                                                        // The name of the municipality or the higher territorial-administrative formation.
-                                                        firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas(),
-                                                        // Getting the path to the toponym; if the method returns null, then requesting the name of the building.
-                                                        firstGeoObject.getThoroughfare() || firstGeoObject.getPremise()
-                                                    ].filter(Boolean).join(', '),
-                                                    // Specifying a string with the address of the object as the balloon content.
-                                                    balloonContent: firstGeoObject.getAddressLine()
-                                                });
-                                        });
-                                    }
-                                }
                             }
                         }
                 });
             }
         }
+        
         function mapEtap()
         {
             var lat = $("input[name=lat]").val();
@@ -683,6 +610,51 @@
 
   });
 </script>
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhaf1dM31SC1MV8cdYpbY2WlhHEhAFg4s&libraries=places"></script>
+    
+    
+    <script>
+        var map;
+        var myLatLng;
+        function geoLocationInit() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, fail);
+            } else {
+                alert("Browser not supported");
+            }
+        }
+        function success(position) {
+            // console.log(position);
+            // var coords = e.get('coords');
+            
+            var latval = position.coords.latitude;
+            var lngval = position.coords.longitude;
+            $("input[name=lat]").val(latval);
+            $("input[name=long]").val(lngval);
+            myLatLng = new google.maps.LatLng(latval, lngval);
+            createMap(myLatLng);
+        }
+        function fail() {
+            alert("it fails");
+        }
+        function createMap(myLatLng) {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: myLatLng,
+                zoom: 12
+            });
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map
+            });
+        }
+        function createMarker(latlng, icn, name) {
+            var marker = new google.maps.Marker({
+                position: latlng,
+                map: map,
+                icon: icn,
+                title: name
+            });
+        }
+    </script>
 </body>
 </html>

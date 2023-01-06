@@ -1,7 +1,7 @@
 <!-- Favicons -->
-<link rel="apple-touch-icon" href="img/favicon180.png" sizes="180x180">
+{{-- <link rel="apple-touch-icon" href="img/favicon180.png" sizes="180x180">
 <link rel="icon" href="img/favicon32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="img/favicon16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="img/favicon16.png" sizes="16x16" type="image/png"> --}}
 
 <!-- Material icons-->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -36,4 +36,15 @@
     -webkit-border-radius: 190px;
     border-radius: 190px;
 }
+     input:not[type="submit"] {
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        padding: 5px;
+      }
+      input:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 1000px white inset !important;
+      }
+      .hidden-input {
+        display: none;
+      }
 </style>

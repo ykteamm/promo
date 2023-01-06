@@ -8,12 +8,58 @@
             @foreach ($users as $user)
             <div class="card">
                 <div class="card-header" id="headingThree">
-                    <h2 class="mb-0">
-                        <button class="btn btn-block text-left px-0 collapsed" type="button" data-toggle="collapse" data-target="#collapseThree{{$user->id}}" aria-expanded="false" aria-controls="collapseThree">
-                           <span style="font-size:24px;" class="mr-4">{{$user->pharmacy}}</span> 
-                           <span style="font-size:18px;">{{$user->last_name}} {{$user->first_name}}</span>
-                        </button>
-                    </h2>
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-block text-left px-0 collapsed" type="button" data-toggle="collapse" data-target="#collapseThree{{$user->id}}" aria-expanded="false" aria-controls="collapseThree">
+                                <span style="font-size:24px;">{{$user->pharmacy}}</span> 
+                             </button>
+                        </div>
+                        @php
+                            $delivery = 0;
+                            $cashback = 0;
+                            foreach ($user->order as $key => $order) {
+                                if($order->delivery == 0)
+                                {
+                                    $delivery +=1;
+                                }
+                                if($order->cashback == 0)
+                                {
+                                    $cashback +=1;
+                                }
+                            }
+                        @endphp
+                        @if ($delivery != 0 || $cashback != 0)
+                        <div class="col-auto mt-2">
+                            <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                @if ($delivery != 0)
+                                <button type="button" class="btn btn-sm btn-outline-success">
+                                    <i class="fa-regular fa-truck"></i>
+                                    <span class="badge badge-danger badge-pill">{{$delivery}}</span>
+                                </button>
+                                @endif
+                                @if ($cashback != 0)
+                                <button type="button" class="btn btn-sm btn-outline-success">
+                                    <i class="fa-solid fa-sack-dollar"></i>
+                                    <span class="badge badge-danger badge-pill">{{$cashback}}</span>
+                                </button>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+
+                    </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <h2 class="mb-0">
+                                
+                                <button class="btn btn-block text-left px-0 collapsed" type="button" data-toggle="collapse" data-target="#collapseThree{{$user->id}}" aria-expanded="false" aria-controls="collapseThree">
+                                <span style="font-size:18px;">{{$user->last_name}} {{$user->first_name}}</span>
+                                </button>
+                            </h2>
+                         </div>
+                    </div>
+                    
+
                 </div>
                 <div id="collapseThree{{$user->id}}" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                     <div class="card-body">
@@ -86,11 +132,11 @@
                             <div class="media mt-1">                            
                                 <div class="media-body">
                                     <h6 class="mb-1 text-default">Buyurtma summasi</h6>
-                                    <p class="">{{$sum}} so'm</p>
+                                    <p class="">{{number_format($sum,0,',',' ')}} so'm</p>
                                 </div>
                                 <div class="media-body text-right">
                                     <h6 class="mb-1 text-default">Buyurtma bonusi</h6>
-                                    <p class="">{{$bonus}} so'm</p>
+                                    <p class="">{{number_format($bonus,0,',',' ')}} so'm</p>
                                 </div>
                                 {{-- <button class="btn btn-default btn-40 rounded-circle"><i class="material-icons">repeat</i></button>                             --}}
                             </div>
@@ -107,8 +153,8 @@
                                     <div class="media-body">
                                         {{-- <small class="text-secondary">Adididas</small> --}}
                                         <h6 class="mb-1 text-default">{{$ord->product->name}} ({{$ord->stock}})</h6>
-                                        <span>Narxi: {{$ord->product->price}} x {{$ord->stock}} = {{$ord->product->price*$ord->stock}}</span>
-                                        <p>Bonus: {{$ord->product->bonus}} x {{$ord->stock}} = {{$ord->product->bonus*$ord->stock}}</p>
+                                        <span>Narxi: {{number_format($ord->product->price,0,',',' ')}} x {{$ord->stock}} = {{number_format($ord->product->price*$ord->stock,0,',',' ')}}</span>
+                                        <p>Bonus: {{number_format($ord->product->bonus,0,',',' ')}} x {{$ord->stock}} = {{number_format($ord->product->bonus*$ord->stock,0,',',' ')}}</p>
                                     </div>
                                 </div>
                                 @endforeach

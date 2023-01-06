@@ -17,7 +17,6 @@ class AdminOrderController extends Controller
     public function index()
     {
         $users = User::with('order','order.orderProduct','order.orderProduct.product')->get();
-        // return $users;
         return view('admin.order.index',compact('users'));
     }
 

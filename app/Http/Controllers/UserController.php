@@ -60,6 +60,7 @@ class UserController extends Controller
     {
         
         $number = preg_replace("/[^0-9]/", '', $request->phone);
+        Session::put('password',$request->password);
 
         $phone = User::where('phone_number',$number)->first();
         if($phone)
