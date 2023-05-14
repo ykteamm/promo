@@ -11,7 +11,7 @@
 
             <div class="container p-0">
                 <div class="mb-3 pt-3">
-                    @if (isset(getReyting()) && count(getReyting()) > 0)
+                    @if (count(getReyting()) > 0)
                         @php
                             $reytings = getReyting();
                         @endphp
