@@ -36,7 +36,7 @@
     <form action="{{route('login')}}" method="POST" id="loginForm">
         @csrf
     <div class="flex-box">
-    <h4>Parolni kiriting</h4>
+    <h4 style="color:white;">Parolni kiriting</h4>
         <div class="passcode-area">
         <input autofocus type="text" maxlength="1" id='log1'>
         <input type="text" maxlength="1" id='log2'>
