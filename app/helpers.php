@@ -66,6 +66,7 @@ if(!function_exists('getMyMaosh')){
 if(!function_exists('getReyting')){
     function getReyting() {
 
+        
         $reyting = HistoryMoneyArrival::with('user')->selectRaw('SUM(money) as allmoney,user_id')
         ->orderBy('allmoney','DESC')
         ->groupBy('user_id')->get();
