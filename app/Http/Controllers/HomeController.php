@@ -1,13 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\HistoryMoneyArrival;
+use App\Models\Order;
+use App\Models\OrderProduct;
 use Stevebauman\Location\Facades\Location;
 // use Stevebauman\Location\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\UserBattle;
+use App\Services\UserBattleServices;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -28,42 +36,45 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $agent = request()->header('user-agent');
-        // $clientIP = $this->getIp();
-        // return $clientIP;
-        // $ip = '49.35.41.195'; //For  static IP address get
-        // // $ip = request()->ip(); //Dynamic IP address get
-        // // $ip = $_SERVER['REMOTE_ADDR'];
-        // // $details = json_decode(file_get_contents("http://ipinfo.io/{$ip}/json"));
-        // $data = Location::get($ip);    
-        // return $data;
-        // $ipAddresses = $this->getClientIps();
-        // $method2 = request()->getClientIp();
-        // return $data;            
-        // Session::flush();
-        // return view('details',compact('data'));
-        // if(Session::get('name_etap') && Session::get('date_etap') && Session::get('phone_etap') && Session::get('code_etap') && Session::get('parol_etap') && Session::get('map_etap'))
-        // {
-        //     User::create([
-        //         'first_name' => Session::get('name_etap'),
-        //         'last_name' => Session::get('last_name'),
-        //         'birth_date' => Session::get('year').'-'.Session::get('month').'-'.Session::get('day'),
-        //         'phone_number' => Session::get('phone'),
-        //         'password' => Hash::make(Session::get('password')),
-        //     ]);
-        //     return view('user.index');
-        // Session::flush();
 
-        // return Session::get('user');
-        // return Auth::user();
-        // if(!Session::has('user'))
-        // {
-        //     return view('auth.login');
-        // }
-        // else{
-            // $user = User::where('id',Session::get('user')->id)->first();
-            return view('home');
-        // }
+
+        $orders = Order::where('user_id',Auth::id())->orderBy('id','ASC')->get();
+
+        $active_order = Order::where('user_id',Auth::id())
+        ->where('status',4)
+        ->orderBy('id','DESC')
+        ->first();
+
+        $my_id = Auth::id();
+
+        $my_battle = UserBattle::with('u1ids','u2ids')
+            ->where(function($query) use ($my_id){
+                        $query->where('u1id',$my_id)
+                        ->orWhere('u2id',$my_id);
+                    })->where('ends',0)->first();
+        if($active_order)
+        {
+            $qarz = Order::where('user_id',Auth::id())
+            ->whereRaw('order_price > money_arrival')
+            ->where('status',4)
+            ->where('id','!=',$active_order->id)
+            ->orderBy('id','ASC')
+            ->get();
+        }else{
+            $qarz = null;
+        }
+
+        // return $qarz;
+        // $new = new UserBattleServices;
+        // $new = $new->endBattle('2023-05-14');
+
+
+            return view('home',[
+                'orders' => $orders,
+                'active_order' => $active_order,
+                'my_battle' => $my_battle,
+                'qarz' => $qarz,
+            ]);
     }
     public function getIp(){
         foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key){

@@ -16,3 +16,4 @@
 
 <!-- page level custom script -->
 <script src="{{asset('mobile/js/app.js')}}"></script>
+

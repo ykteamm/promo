@@ -12,7 +12,8 @@ class OrderProduct extends Model
     protected $fillable = [
         'order_id',
         'product_id',
-        'stock'
+        'quantity',
+        'product_price',
     ];
 
     public function order()
@@ -22,6 +23,6 @@ class OrderProduct extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class,'product_id','id');
+        return $this->belongsTo(Medicine::class,'product_id','id');
     }
 }

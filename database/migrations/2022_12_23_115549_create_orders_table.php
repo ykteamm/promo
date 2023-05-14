@@ -15,10 +15,14 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->integer('sort');
-            $table->integer('delivery')->default(0);
-            $table->integer('cashback')->default(0);
+            $table->foreignId('user_id')->onDelete('CASCADE');
+            $table->integer('status')->default(1);
+            $table->integer('order_price');
+            $table->integer('promo_price');
+            $table->integer('money_arrival')->nullable();
+            $table->integer('number');
+            $table->integer('close')->default(0);
+            $table->date('delivery_date')->nullable();
             $table->timestamps();
         });
     }

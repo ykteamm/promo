@@ -39,32 +39,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs = $request->all();
-        unset($inputs['_token']);
-        $order_exists = Order::where('user_id',Auth::user()->id)->value('sort');
-        if($order_exists != NULL)
-                {
-                    $sort = intval($order_exists)+1;
-                }else{
-                    $sort = 1;
-                }
-                $new_order = new Order([
-                    'user_id' => Auth::user()->id,
-                    'sort' => $sort,
-                ]);
-                $new_order->save();
-        foreach ($inputs as $key => $value) {
-            if(intval($value) != 0)
-            {
-                $new_order_product = new OrderProduct([
-                    'order_id' => $new_order->id,
-                    'product_id' => $key,
-                    'stock' => $value,
-                ]);
-                $new_order_product->save();
-            }
-        }
-        return redirect()->back();
+        return $request;
     }
 
     /**
@@ -111,4 +86,54 @@ class OrderController extends Controller
     {
         //
     }
+    public function orderStore(Request $request)
+    {
+
+        // return $request;
+
+        $order_count = Order::where('user_id',$request['provizor_id'])->count();
+
+        $order = new Order;
+        $order->user_id = $request['provizor_id'];
+        $order->order_price = $request['order_price'];
+        $order->promo_price = $request['promo_price'];
+        $order->money_arrival = 0;
+        $order->close = 0;
+        $order->number = $order_count+1;
+        $order->save();
+
+        foreach ($request['order'] as $key => $value) {
+
+            $order_product = new OrderProduct;
+            $order_product->order_id = $order->id;
+            $order_product->product_id = $value['medicine_id'];
+            $order_product->quantity = $value['number'];
+            $order_product->product_price = $value['price_product'];
+            $order_product->save();
+
+        }
+
+        // return $arr;
+        if($order)
+        {
+            return [
+                'status' => 200
+            ];
+        }else{
+            return [
+                'status' => 300
+            ];
+        }
+    }
+
+    public function changeOrderStatus($order_id,$status)
+    {
+
+        $order = Order::find($order_id);
+        $order->status = $status;
+        $order->save();
+        return redirect()->back();
+    }
+
+
 }

@@ -7,12 +7,47 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\UserPharmacy;
+use App\Models\UserPromoBall;
 use Illuminate\Support\Facades\Hash;
 use Stevebauman\Location\Facades\Location;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    public function provizorStore(Request $request)
+    {
+
+        $harf = ['A','B','C','D','E','F','H'];
+
+        $password = $harf[rand(0, 6)].rand(1000, 9999);
+
+        $user = new User;
+        $user->first_name = $request['first_name'];
+        $user->last_name = $request['last_name'];
+        $user->phone_number = '998'.$request['phone_number'];
+        $user->region_id = $request['region_id'];
+        $user->district_id = $request['district_id'];
+        $user->password = Hash::make($password);
+        $user->pass = $password;
+        $user->save();
+
+        $user_pharmacy = new UserPharmacy();
+        $user_pharmacy->user_id = $user->id;
+        $user_pharmacy->pharmacy_id = $request['pharmacy_id'];
+        $user_pharmacy->save();
+
+        $user_promo_ball = new UserPromoBall();
+        $user_promo_ball->user_id = $user->id;
+        $user_promo_ball->save();
+
+        return [
+            'status' => 200,
+            'password' => $password,
+        ];
+    }
+
     public function shopping()
     {
         return view('user.shopping');
@@ -58,7 +93,7 @@ class UserController extends Controller
 
     public function phoneEtap(Request $request)
     {
-        
+
         $number = preg_replace("/[^0-9]/", '', $request->phone);
         Session::put('password',$request->password);
 
@@ -113,7 +148,7 @@ class UserController extends Controller
                 'status' => 300
             ];
         }
-        
+
     }
     public function parolEtap(Request $request)
     {
@@ -123,7 +158,7 @@ class UserController extends Controller
         return [
             'status' => 200,
         ];
-        
+
     }
     public function mapEtap(Request $request)
     {

@@ -25,6 +25,7 @@ use App\Http\Controllers\ShopOrderController;
 //     return view('welcome');
 // });
 Auth::routes();
+Route::resource('product', ProductController::class);
 
 Route::middleware('auth')->group(function () {
 
@@ -39,9 +40,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('product-shopping/{product_id}', [UserController::class, 'productShopping'])->name('product-shopping');
 
-    
+
 
     Route::resource('product', ProductController::class);
+
     Route::resource('shop-product', ShopProductController::class);
     Route::resource('order', OrderController::class);
     Route::resource('shop-order', ShopOrderController::class);
@@ -52,8 +54,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/order/delivery/{id}', [AdminOrderController::class, 'delivery'])->name('delivery');
     Route::post('/order/cashback/{id}', [AdminOrderController::class, 'cashback'])->name('cashback');
 
+    Route::get('change-status/{order_id}/{status}', [OrderController::class,'changeOrderStatus'])->name('orderpro.status');
+
+
 });
 });
+
 
 Route::post('/name-etap', [UserController::class, 'nameEtap'])->name('name-etap');
     Route::post('/date-etap', [UserController::class, 'dateEtap'])->name('date-etap');

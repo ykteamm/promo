@@ -15,9 +15,10 @@ class CreateOrderProductsTable extends Migration
     {
         Schema::create('order_products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id');
-            $table->foreignId('product_id');
-            $table->integer('stock');
+            $table->foreignId('order_id')->onDelete('CASCADE');
+            $table->foreignId('product_id')->onDelete('CASCADE');
+            $table->integer('quantity');
+            $table->integer('product_price');
             $table->timestamps();
         });
     }

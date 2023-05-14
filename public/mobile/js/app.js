@@ -186,11 +186,70 @@ $(window).on('load', function () {
             break;
         case "landing":
             /* carousel */
-            var swiper = new Swiper('.introduction', {
-                autoplay: true,
+            var swiper = new Swiper('.active1', {
+                autoplay: false,
+                initialSlide: 1,
                 pagination: {
                     el: '.swiper-pagination',
                 },
+            });
+            var swiper = new Swiper('.active2', {
+                autoplay: false,
+                initialSlide: 2,
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+            });
+            var swiper = new Swiper('.active3', {
+                autoplay: false,
+                initialSlide: 3,
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+            });
+            var swiper7 = new Swiper('.swipercards', {
+                effect: 'coverflow',
+                grabCursor: true,
+                initialSlide: 2,
+
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                spaceBetween: 15,
+                coverflowEffect: {
+                    rotate: 30,
+                    stretch: 0,
+                    depth: 80,
+                    modifier: 1,
+                    slideShadows: true,
+                }
+
+            });
+            var swiper = new Swiper('.swiper-users', {
+                slidesPerView: 'auto',
+                spaceBetween: 30,
+                pagination: 'false'
+            });
+
+            var swiper = new Swiper('.addsendcarousel', {
+                slidesPerView: '4',
+                spaceBetween: 15,
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+            });
+            var swiper = new Swiper('.swiper-cards', {
+                slidesPerView: 'auto',
+                spaceBetween: 30,
+                initialSlide: 'last',
+
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+            });
+
+            $('#more-expand-btn').on('click', function () {
+                $('#more-expand').addClass("active");
+                $(this).addClass("active");
             });
             break;
         case "productdetails":
