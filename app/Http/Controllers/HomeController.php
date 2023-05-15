@@ -36,7 +36,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // $response = Http::get('https://jang.novatio.uz/api/outer-market');
 
+        $res_market = Http::get('https://jang.novatio.uz/api/outer-market');
+
+        $markets = json_decode($res_market);
 
         $orders = Order::where('user_id',Auth::id())->orderBy('id','ASC')->get();
 
@@ -74,6 +78,7 @@ class HomeController extends Controller
                 'active_order' => $active_order,
                 'my_battle' => $my_battle,
                 'qarz' => $qarz,
+                'markets' => $markets,
             ]);
     }
     public function getIp(){

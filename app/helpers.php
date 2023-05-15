@@ -3,6 +3,7 @@
 use App\Models\HistoryMoneyArrival;
 use App\Models\UserPromoBall;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 if(!function_exists('getHostNameUrl')){
     function getHostNameUrl() {
@@ -66,7 +67,7 @@ if(!function_exists('getMyMaosh')){
 if(!function_exists('getReyting')){
     function getReyting() {
 
-        
+
         $reyting = HistoryMoneyArrival::with('user')->selectRaw('SUM(money) as allmoney,user_id')
         ->orderBy('allmoney','DESC')
         ->groupBy('user_id')->get();
@@ -75,6 +76,14 @@ if(!function_exists('getReyting')){
     }
 }
 
+// if(!function_exists('getMarketData')){
+//     function getMarketData() {
 
+//         // $response = Http::get('https://jang.novatio.uz/api/outer-market');
+//         $response = Http::get('http://127.0.0.1:8888/api/outer-market');
+
+//         return $response;
+//     }
+// }
 
 

@@ -13,6 +13,7 @@
         </div>
 </div>
 @include('modal.reyting')
+@include('modal.bonus')
 
 @endsection
 @section('scripts')

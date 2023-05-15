@@ -203,15 +203,15 @@
             </div>
             <div class="col-6 pl-0 pr-4">
 
-                {{-- <button type="button" class="btn pl-0" data-toggle="modal" data-target="#bonus">
+                <button type="button" class="btn pl-0" data-toggle="modal" data-target="#bonus">
                     <img src="{{ asset('mobile/market2233.png') }}" class="for-media-img" width="160px"
                         alt="">
-                </button> --}}
-                <button type="button" class="btn pl-0" data-toggle="modal"
-                    data-target="#viloyatim">
+                </button>
+                {{-- <button type="button" class="btn pl-0" data-toggle="modal"
+                    data-target="#bo">
                     <img src="{{ asset('mobile/viloyatim.webp') }}" class="for-media-img"
                         width="160px" alt="">
-                </button>
+                </button> --}}
             </div>
         </div>
 
