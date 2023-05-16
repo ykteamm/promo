@@ -4,29 +4,28 @@
             <a href="/"><img src="{{asset('mobile/wdwd.png')}}" width="90px" alt=""></a>
         </div>
         {{-- @if (userme()->rm != 1 && userme()->rm != 2) --}}
-        <div class="pl-0 mt-3 pr-0">
+        {{-- <div class="pl-0 mt-3 pr-0">
             <div class="input-group pr-0">
-                {{-- <input type="text" value="{{userBall()->ball}}" class="form-control" disabled style="border-top-right-radius: 18px !important;border-bottom-right-radius: 18px !important;height: calc(1.5em + 0.75rem + -6px);"> --}}
                 <div class="input-group-append">
                     <button class="btn img-container" type="button" style="padding: 0px 0px;" data-toggle="modal" data-target="#history-kubok">
                         <img src="{{asset('mobile/kubok22.webp')}}" width="95px;" alt="">
                           <div class="text-block supercell">
-                            {{-- {{number_format(userBall()->ball,0,',',' ')}} --}}
                             {{getMyMaosh()}}
                           </div>
                     </button>
                 </div>
             </div>
-        </div>
-        <div class="pl-0 pr-0 mt-3 m-2">
+        </div> --}}
+        <div class="pl-0 pr-0 mt-3 m-2" style="margin-left: 15% !important">
             <div class="input-group">
                 {{-- <input type="text" value="{{userElexir()->elexir}}" class="form-control" disabled style="border-top-right-radius: 18px !important;border-bottom-right-radius: 18px !important;height: calc(1.5em + 0.75rem + -6px);"> --}}
                 <div class="input-group-append">
                     <button class="btn img-container" type="button" style="padding: 0px 0px;" data-toggle="modal" data-target="#history-elexir">
-                        <img src="{{asset('mobile/elekser22.webp')}}" width="95px" alt="">
+                        <img src="{{asset('mobile/cris.png')}}" width="120px" height="30px" alt="">
                         <div class="text-block supercell">
-                            {{-- {{number_format(userElexir()->elexir,0,',',' ')}} --}}
-                            {{getMyPromoBall()->promo_ball}}
+                            {{number_format(getMyPromoBall()->promo_ball,0,',',' ')}}
+                            {{-- {{getMyPromoBall()->promo_ball}} --}}
+                            {{-- 12 700 --}}
                           </div>
                     </button>
                 </div>

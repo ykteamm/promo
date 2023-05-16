@@ -1,4 +1,4 @@
-<div class="modal fade " id="bonus" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+{{-- <div class="modal fade " id="bonus" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-sm modal-dialog-centered" role="document">
         <div class="modal-content bg-transparent d-flex justify-content-center align-items-center">
@@ -16,7 +16,6 @@
                 <div style="position: absolute;top:187px;left:0;right:0;bottom:15px;width:100%;overflow:scroll;">
 
                     @foreach ($markets as $key => $item)
-                        {{-- href="{{route('shop',$item->id)}}"  --}}
                         <a class="d-flex justify-content-center align-items-center">
                             <div style="position:relative;width:95%;padding-right:7px;padding-left:1px">
                                 <img class="mb-1" width="100%" src="{{ asset('mobile/market/m.png') }}"
@@ -48,4 +47,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
