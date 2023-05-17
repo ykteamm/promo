@@ -1,4 +1,4 @@
-{{-- <div class="modal fade " id="bonus" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade " id="bonus" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-sm modal-dialog-centered" role="document">
         <div class="modal-content bg-transparent d-flex justify-content-center align-items-center">
@@ -47,4 +47,4 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
