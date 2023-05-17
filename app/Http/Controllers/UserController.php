@@ -42,6 +42,19 @@ class UserController extends Controller
         $user_promo_ball->user_id = $user->id;
         $user_promo_ball->save();
 
+        $response = Http::post('notify.eskiz.uz/api/auth/login', [
+            'email' => 'mubashirov2002@gmail.com',
+            'password' => 'PM4g0AWXQxRg0cQ2h4Rmn7Ysoi7IuzyMyJ76GuJa'
+        ]);
+        $token = $response['data']['token'];
+
+        $sms = Http::withToken($token)->post('notify.eskiz.uz/api/message/sms/send', [
+            'mobile_phone' => '998'.$request['phone_number'],
+            'message' => 'Sizning parolingiz '.$password ."\n" .'https://promo.novatio.uz',
+            'from' => '4546',
+            'callback_url' => 'http://0000.uz/test.php'
+        ]);
+
         return [
             'status' => 200,
             'password' => $password,
