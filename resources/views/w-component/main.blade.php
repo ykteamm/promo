@@ -203,15 +203,18 @@
             </div>
             <div class="col-6 pl-0 pr-4">
 
-                <button type="button" class="btn pl-0" data-toggle="modal" data-target="#bonus">
+                {{-- <button type="button" class="btn pl-0" data-toggle="modal" data-target="#bonus">
                     <img src="{{ asset('mobile/market2233.png') }}" class="for-media-img" width="160px"
+                    style="box-shadow: 0px 0px 11px 7px #32d345;border-radius: 12px;animation: btn 2s linear infinite;"
                         alt="">
-                </button>
-                {{-- <button type="button" class="btn pl-0" data-toggle="modal"
-                    data-target="#bo">
-                    <img src="{{ asset('mobile/viloyatim.webp') }}" class="for-media-img"
-                        width="160px" alt="">
                 </button> --}}
+                <button type="button" class="btn btn-primary mt-2 supercell" data-toggle="modal"
+                    data-target="#bo"
+                    style="box-shadow: 0px 0px 11px 7px #a5da6e;border-radius: 12px;
+                    animation: btn 2s linear infinite;margin-top:11px !important;background:#ffbb2c;"
+                    >
+                    <span style="-webkit-text-stroke: 1px black;color:white;font-s">MARKET</span>
+                </button>
             </div>
         </div>
 

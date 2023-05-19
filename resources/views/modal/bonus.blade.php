@@ -9,7 +9,7 @@
                 </button>
                 <div style="position:absolute;top:126px;left:79px;width:89px;height:29px;border-radius:10px" class="d-flex align-items-center justify-content-center">
                     <span style="font-weight: 600;color:#fff;font-size:16px" class="supercell">
-                        {{ number_format(1250, 0, ',', ' ') }}
+                        {{ number_format(0, 0, ',', ' ') }}
                     </span>
                 </div>
                 <img src="{{ asset('mobile/market/marketmain.png') }}" width="100%" alt="Image Market">
