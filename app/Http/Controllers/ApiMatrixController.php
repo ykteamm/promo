@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HistoryMoneyArrival;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\User;
 use App\Models\UserBattle;
 use Illuminate\Http\Request;
@@ -125,6 +126,14 @@ class ApiMatrixController extends Controller
         return [
             'status' => $status
         ];
+    }
+
+    public function getOrder(Request $request)
+    {
+        $order = OrderProduct::with('product')->where('order_id',$request->order_id)->get();
+
+        return response()->json($order);
+
     }
 
 }

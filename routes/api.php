@@ -38,3 +38,5 @@ Route::get('provizors', [ApiMatrixController::class, 'allProvizors']);
 Route::post('money-arrival', [ApiMatrixController::class, 'moneyArrival']);
 
 Route::post('battle-store', [ApiMatrixController::class, 'battleStore']);
+
+Route::post('get-order', [ApiBattleController::class, 'getOrder']);
