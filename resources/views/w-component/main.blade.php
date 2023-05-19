@@ -209,7 +209,7 @@
                         alt="">
                 </button> --}}
                 <button type="button" class="btn btn-primary mt-2 supercell" data-toggle="modal"
-                    data-target="#bo"
+                    data-target="#bonus"
                     style="box-shadow: 0px 0px 11px 7px #a5da6e;border-radius: 12px;
                     animation: btn 2s linear infinite;margin-top:11px !important;background:#ffbb2c;"
                     >
