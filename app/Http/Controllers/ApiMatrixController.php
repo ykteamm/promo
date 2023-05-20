@@ -13,7 +13,7 @@ class ApiMatrixController extends Controller
 {
     public function orders()
     {
-        $orders = Order::with('orderProduct','user','orderProduct.product')->orderBy('created_at','DESC')->orderBy('status','ASC')->get();
+        $orders = Order::with('orderProduct','user','orderProduct.product','user.pharmacy')->orderBy('created_at','DESC')->orderBy('status','ASC')->get();
 
         return response()->json($orders);
     }
