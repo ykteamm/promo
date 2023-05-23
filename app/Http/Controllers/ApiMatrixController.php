@@ -132,7 +132,7 @@ class ApiMatrixController extends Controller
     {
         $order = OrderProduct::with('product')->where('order_id',$request->order_id)->get();
 
-        return response()->json($order);
+        return $order;
 
     }
 
