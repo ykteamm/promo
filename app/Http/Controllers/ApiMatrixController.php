@@ -131,10 +131,14 @@ class ApiMatrixController extends Controller
     public function getOrder(Request $request)
     {
         $order = OrderProduct::with('product')->where('order_id',$request->order_id)->get();
+        $user_id = Order::find($request->order_id);
+        $user = User::find($user_id->user_id);
+        $name = $user->last_name.' '.$user->first_name;
         $count = count($order);
         return [
             'order' => $order,
             'count' => $count,
+            'name' => $name,
         ];
 
     }
