@@ -172,7 +172,7 @@
 
                 <div class="bonus_pro supercell" style="border-radius:5px;padding: 2px 2px;">
 
-                    {{number_format($bonus1,0,',',' ')}}
+                    {{number_format(floor($bonus1/1000),0,',',' ')}}
 
                 </div>
         </div>

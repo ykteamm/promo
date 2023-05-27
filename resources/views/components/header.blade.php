@@ -23,7 +23,7 @@
                     <button class="btn img-container" type="button" style="padding: 0px 0px;" data-toggle="modal" data-target="#history-elexir">
                         <img src="{{asset('mobile/cris.png')}}" width="150px" height="30px" alt="">
                         <div class="text-block supercell">
-                            {{number_format(getMyPromoBall()->promo_ball,0,',',' ')}}
+                            {{number_format(floor(getMyPromoBall()->promo_ball/1000),0,',',' ')}}
                             {{-- {{getMyPromoBall()->promo_ball}} --}}
                             {{-- 12 700 --}}
                           </div>
