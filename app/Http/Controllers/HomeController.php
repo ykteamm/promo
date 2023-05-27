@@ -38,6 +38,9 @@ class HomeController extends Controller
     {
         // $response = Http::get('https://jang.novatio.uz/api/outer-market');
 
+        // $sd = new UserBattleServices;
+        // $ff = $sd->endBattle('2023-05-27');
+
         $res_market = Http::get(getBattleUrl().'/api/outer-market');
 
         $markets = json_decode($res_market);

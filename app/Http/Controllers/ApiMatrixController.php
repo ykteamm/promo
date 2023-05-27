@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\HistoryMoneyArrival;
+use App\Models\Money;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\PromoHistory;
 use App\Models\User;
 use App\Models\UserBattle;
+use App\Models\UserPromoBall;
 use Illuminate\Http\Request;
 
 class ApiMatrixController extends Controller
@@ -44,6 +47,9 @@ class ApiMatrixController extends Controller
         $history->add_date = $request->date;
         $history->save();
 
+        $this->updateUserMoney($request->provizor_id,$request->money);
+        $this->updateFixedBonus($request->provizor_id,$request->money);
+
         $qarz = Order::where('user_id',$request->provizor_id)
             ->whereRaw('order_price > money_arrival')
             ->where('status',4)
@@ -54,6 +60,7 @@ class ApiMatrixController extends Controller
         if(count($qarz) > 0)
         {
             $money = $request->money;
+
             foreach ($qarz as $q) {
 
                 $diff = $q->order_price - $q->money_arrival;
@@ -63,9 +70,14 @@ class ApiMatrixController extends Controller
                     // $plus = $money - $diff;
                     $money = $money - $diff;
                     $active_order_update = Order::find($q->id);
-                    $active_order_update->money_arrival = $q->money_arrival + $diff;
+                    $active_order_update->money_arrival = $q->money_arrival + $money;
                     $active_order_update->close = 1;
                     $active_order_update->save();
+
+                    $this->updatePromoBall($q->id,$money,$request->provizor_id);
+
+
+
 
                 }elseif($money < $diff)
                 {
@@ -73,6 +85,9 @@ class ApiMatrixController extends Controller
                     $active_order_update = Order::find($q->id);
                     $active_order_update->money_arrival = $q->money_arrival + $money;
                     $active_order_update->save();
+
+                    $this->updatePromoBall($q->id,$money,$request->provizor_id);
+
                     $money = 0;
 
                 }elseif($money = $diff)
@@ -82,10 +97,15 @@ class ApiMatrixController extends Controller
                     $active_order_update->money_arrival = $q->money_arrival + $money;
                     $active_order_update->close = 1;
                     $active_order_update->save();
-
+                    $this->updatePromoBall($q->id,$money,$request->provizor_id);
                     $money = 0;
 
                 }
+                // if($money > 0)
+                // {
+                //     $this->updatePromoBall($q->id,$money,$request->provizor_id);
+                // }
+
                 else{
                     return [
                         'status' => 200,
@@ -142,5 +162,97 @@ class ApiMatrixController extends Controller
         ];
 
     }
+    public function updatePromoBall($order_id,$summ,$id)
+    {
+
+        $my_battle = UserBattle::with('u1ids','u2ids')
+            ->where(function($query) use ($id){
+                        $query->where('u1id',$id)
+                        ->orWhere('u2id',$id);
+                    })->where('ends',0)->first();
+        if(!$my_battle)
+        {
+            $active_order_update = Order::find($order_id);
+
+            $foiz = (($active_order_update->promo_price)*100)/($active_order_update->order_price);
+            $promo_b = round(($summ)*$foiz/100*0.1);
+
+            $promo_ball = UserPromoBall::where('user_id',$id)->first();
+            if($promo_ball)
+                {
+                    $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
+                    $promo_ball->save();
+                }else{
+                    $promo_ball = new UserPromoBall;
+                    $promo_ball->user_id = $id;
+                    $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
+                    $promo_ball->save();
+                }
+
+            PromoHistory::create([
+                'user_id' => $id,
+                'order_id' => $order_id,
+                'money_arrival' => $summ,
+                'promo_ball' => $promo_b,
+            ]);
+
+
+
+        }
+    }
+    public function updateUserMoney($id,$sum)
+        {
+            $my_battle = UserBattle::with('u1ids','u2ids')
+            ->where(function($query) use ($id){
+                        $query->where('u1id',$id)
+                        ->orWhere('u2id',$id);
+                    })->where('ends',0)->first();
+
+            if(!$my_battle)
+            {
+                $promo_b = round($sum*0.1);
+
+                $promo_ball = UserPromoBall::where('user_id',$id)->first();
+            if($promo_ball)
+                {
+                    $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
+                    $promo_ball->save();
+                }else{
+                    $promo_ball = new UserPromoBall;
+                    $promo_ball->user_id = $id;
+                    $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
+                    $promo_ball->save();
+                }
+
+            }
+        }
+
+        public function updateFixedBonus($id,$sum)
+        {
+            $my_battle = UserBattle::with('u1ids','u2ids')
+            ->where(function($query) use ($id){
+                        $query->where('u1id',$id)
+                        ->orWhere('u2id',$id);
+                    })->where('ends',0)->first();
+
+            if(!$my_battle)
+            {
+                $promo_b = round($sum*0.1);
+                $promo_ball = UserPromoBall::where('user_id',$id)->first();
+                if($promo_ball)
+                {
+                    $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
+                    $promo_ball->save();
+                }else{
+                    $promo_ball = new UserPromoBall;
+                    $promo_ball->user_id = $id;
+                    $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
+                    $promo_ball->save();
+                }
+
+            }
+        }
+
+
 
 }

@@ -116,19 +116,23 @@
             {
                 $summa1 = getMoneyUser($my_battle->start_day,$my_battle->start_day,$my_battle->u1id);
                 $summa_all1 = getMoneyUser($my_battle->start_day,$my_battle->end_day,$my_battle->u1id);
+                $bonus1 = getMoneyUserBonus($my_battle->start_day,$my_battle->end_day,$my_battle->u1id,$my_battle->u2id);
 
             }else{
                 $summa1 = getMoneyUser($my_battle->start_day,$my_battle->start_day,$my_battle->u2id);
                 $summa_all1 = getMoneyUser($my_battle->start_day,$my_battle->end_day,$my_battle->u2id);
+                $bonus1 = getMoneyUserBonus($my_battle->start_day,$my_battle->end_day,$my_battle->u2id,$my_battle->u1id);
             }
 
             if(Auth::user()->id != $my_battle->u1ids->id)
             {
                 $summa2 = getMoneyUser($my_battle->start_day,$my_battle->start_day,$my_battle->u1id);
                 $summa_all2 = getMoneyUser($my_battle->start_day,$my_battle->end_day,$my_battle->u1id);
+                $bonus2 = getMoneyUserBonus($my_battle->start_day,$my_battle->end_day,$my_battle->u1id,$my_battle->u2id);
             }else{
                 $summa2 = getMoneyUser($my_battle->start_day,$my_battle->start_day,$my_battle->u2id);
                 $summa_all2 = getMoneyUser($my_battle->start_day,$my_battle->end_day,$my_battle->u2id);
+                $bonus2 = getMoneyUserBonus($my_battle->start_day,$my_battle->end_day,$my_battle->u2id,$my_battle->u1id);
             }
 
             $bonus_pro = ($summa_all1 + $summa_all2)*0.6*0.1;
@@ -168,7 +172,7 @@
 
                 <div class="bonus_pro supercell" style="border-radius:5px;padding: 2px 2px;">
 
-                    {{number_format($bonus_pro,0,',',' ')}}
+                    {{number_format($bonus1,0,',',' ')}}
 
                 </div>
         </div>

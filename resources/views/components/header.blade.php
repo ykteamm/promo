@@ -21,7 +21,7 @@
                 {{-- <input type="text" value="{{userElexir()->elexir}}" class="form-control" disabled style="border-top-right-radius: 18px !important;border-bottom-right-radius: 18px !important;height: calc(1.5em + 0.75rem + -6px);"> --}}
                 <div class="input-group-append">
                     <button class="btn img-container" type="button" style="padding: 0px 0px;" data-toggle="modal" data-target="#history-elexir">
-                        <img src="{{asset('mobile/cris.png')}}" width="120px" height="30px" alt="">
+                        <img src="{{asset('mobile/cris.png')}}" width="150px" height="30px" alt="">
                         <div class="text-block supercell">
                             {{number_format(getMyPromoBall()->promo_ball,0,',',' ')}}
                             {{-- {{getMyPromoBall()->promo_ball}} --}}
