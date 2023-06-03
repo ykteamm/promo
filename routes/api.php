@@ -31,6 +31,8 @@ Route::post('get-provizor', [ApiBattleController::class, 'getProvizor']);
 
 Route::get('orders', [ApiMatrixController::class, 'orders']);
 
+Route::post('order-update', [ApiMatrixController::class, 'orderUpdate']);
+
 Route::post('change-status', [ApiMatrixController::class, 'changeStatus']);
 
 Route::get('provizors', [ApiMatrixController::class, 'allProvizors']);

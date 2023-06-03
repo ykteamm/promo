@@ -6,6 +6,7 @@ use App\Models\HistoryMoneyArrival;
 use App\Models\Money;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\PriceMedicine;
 use App\Models\PromoHistory;
 use App\Models\User;
 use App\Models\UserBattle;
@@ -184,6 +185,39 @@ class ApiMatrixController extends Controller
             'name' => $name,
         ];
 
+    }
+    public function orderUpdate(Request $request)
+    {
+
+        $proId = [36,37,38,39,29,47];
+
+        $allsum = 0;
+        $promosum = 0;
+
+        foreach($request->product as $key => $value)
+        {
+            $price = PriceMedicine::where('medicine_id',$key)->first()->price;
+
+            $allsum += $price*$value;
+
+            if(in_array($key,$proId))
+            {
+                $promosum += $price*$value;
+            }
+
+            $op = OrderProduct::where('order_id',$request->order_id)->where('product_id',$key)
+            ->update([
+                'quantity' => $value
+            ]);
+        }
+            $op = Order::where('id',$request->order_id)
+            ->update([
+                'order_price' => $allsum,
+                'promo_price' => $promosum,
+            ]);
+            return response([
+                'status' => 200
+            ]);
     }
     public function updatePromoBall($order_id,$summ,$id)
     {
