@@ -50,15 +50,8 @@ class ApiMatrixController extends Controller
             ->first();
         if($qarzs)
         {
-            if(($qarzs->order_price - $qarzs->money_arrival) < $request->money)
+            if(($qarzs->order_price - $qarzs->money_arrival) >= $request->money)
             {
-                return [
-                    'status' => 300,
-                ];
-            }
-
-        }
-        // return 333;
                 $history = new HistoryMoneyArrival;
                 $history->user_id = $request->provizor_id;
                 $history->money = $request->money;
@@ -141,6 +134,14 @@ class ApiMatrixController extends Controller
                 return [
                     'status' => 200,
                 ];
+            }else{
+                return [
+                    'status' => 300,
+                ];
+            }
+
+        }
+
     }
 
     public function battleStore(Request $request)
