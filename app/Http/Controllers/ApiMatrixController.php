@@ -140,6 +140,10 @@ class ApiMatrixController extends Controller
                 ];
             }
 
+        }else{
+            return [
+                'status' => 300,
+            ];
         }
 
     }
