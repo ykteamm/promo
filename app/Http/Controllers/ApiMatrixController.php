@@ -312,7 +312,7 @@ class ApiMatrixController extends Controller
         public function moneys()
         {
             // $moneys = Order::with('user','user.history_money')->where('close',0)->orderBy('id','ASC')->get();
-            $orders = Order::with('user','user.history_money','user.pharmacy')->orderBy('id','DESC')->orderBy('status','DESC')->get();
+            $orders = Order::with('user','user.history_money','user.pharmacy')->whereIn('status',[3,4])->orderBy('id','DESC')->orderBy('status','DESC')->get();
 
             return response()->json($orders);
 
