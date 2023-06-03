@@ -9,6 +9,7 @@ use App\Models\OrderProduct;
 use App\Models\PromoHistory;
 use App\Models\User;
 use App\Models\UserBattle;
+use App\Models\UserPharmacy;
 use App\Models\UserPromoBall;
 use Illuminate\Http\Request;
 
@@ -41,88 +42,105 @@ class ApiMatrixController extends Controller
     public function moneyArrival(Request $request)
     {
 
-        $history = new HistoryMoneyArrival;
-        $history->user_id = $request->provizor_id;
-        $history->money = $request->money;
-        $history->add_date = $request->date;
-        $history->save();
-
-        $this->updateUserMoney($request->provizor_id,$request->money);
-        $this->updateFixedBonus($request->provizor_id,$request->money);
-
-        $qarz = Order::where('user_id',$request->provizor_id)
+        $qarzs = Order::where('user_id',$request->provizor_id)
             ->whereRaw('order_price > money_arrival')
             ->where('status',4)
             ->where('close',0)
             ->orderBy('id','ASC')
-            ->get();
-
-        if(count($qarz) > 0)
+            ->first();
+        if($qarzs)
         {
-            $money = $request->money;
+            if(($qarzs->order_price - $qarzs->money_arrival) < $request->money)
+            {
+                return [
+                    'status' => 300,
+                ];
+            }
 
-            foreach ($qarz as $q) {
+        }
+        // return 333;
+                $history = new HistoryMoneyArrival;
+                $history->user_id = $request->provizor_id;
+                $history->money = $request->money;
+                $history->add_date = $request->date;
+                $history->save();
 
-                $diff = $q->order_price - $q->money_arrival;
+                $this->updateUserMoney($request->provizor_id,$request->money);
+                $this->updateFixedBonus($request->provizor_id,$request->money);
 
-                if($money > $diff)
+                $qarz = Order::where('user_id',$request->provizor_id)
+                    ->whereRaw('order_price > money_arrival')
+                    ->where('status',4)
+                    ->where('close',0)
+                    ->orderBy('id','ASC')
+                    ->get();
+
+                if(count($qarz) > 0)
                 {
-                    // $plus = $money - $diff;
-                    $money = $money - $diff;
-                    $active_order_update = Order::find($q->id);
-                    $active_order_update->money_arrival = $q->money_arrival + $money;
-                    $active_order_update->close = 1;
-                    $active_order_update->save();
+                    $money = $request->money;
 
-                    $this->updatePromoBall($q->id,$money,$request->provizor_id);
+                    foreach ($qarz as $q) {
+
+                        $diff = $q->order_price - $q->money_arrival;
+
+                        if($money > $diff)
+                        {
+                            // $plus = $money - $diff;
+                            $money = $money - $diff;
+                            $active_order_update = Order::find($q->id);
+                            $active_order_update->money_arrival = $q->money_arrival + $money;
+                            $active_order_update->close = 1;
+                            $active_order_update->save();
+
+                            $this->updatePromoBall($q->id,$money,$request->provizor_id);
 
 
 
 
-                }elseif($money < $diff)
-                {
+                        }elseif($money < $diff)
+                        {
 
-                    $active_order_update = Order::find($q->id);
-                    $active_order_update->money_arrival = $q->money_arrival + $money;
-                    $active_order_update->save();
+                            $active_order_update = Order::find($q->id);
+                            $active_order_update->money_arrival = $q->money_arrival + $money;
+                            $active_order_update->save();
 
-                    $this->updatePromoBall($q->id,$money,$request->provizor_id);
+                            $this->updatePromoBall($q->id,$money,$request->provizor_id);
 
-                    $money = 0;
+                            $money = 0;
 
-                }elseif($money = $diff)
-                {
+                        }elseif($money = $diff)
+                        {
 
-                    $active_order_update = Order::find($q->id);
-                    $active_order_update->money_arrival = $q->money_arrival + $money;
-                    $active_order_update->close = 1;
-                    $active_order_update->save();
-                    $this->updatePromoBall($q->id,$money,$request->provizor_id);
-                    $money = 0;
+                            $active_order_update = Order::find($q->id);
+                            $active_order_update->money_arrival = $q->money_arrival + $money;
+                            $active_order_update->close = 1;
+                            $active_order_update->save();
+                            $this->updatePromoBall($q->id,$money,$request->provizor_id);
+                            $money = 0;
 
-                }
-                // if($money > 0)
-                // {
-                //     $this->updatePromoBall($q->id,$money,$request->provizor_id);
-                // }
+                        }
+                        // if($money > 0)
+                        // {
+                        //     $this->updatePromoBall($q->id,$money,$request->provizor_id);
+                        // }
 
-                else{
+                        else{
+                            return [
+                                'status' => 200,
+                            ];
+                        }
+
+                    }
+                }else{
                     return [
-                        'status' => 200,
+                        'status' => 300,
                     ];
                 }
 
-            }
-        }else{
-            return [
-                'status' => 300,
-            ];
-        }
 
-
-        return [
-            'status' => 200,
-        ];
+                return [
+                    'status' => 200,
+                ];
     }
 
     public function battleStore(Request $request)
@@ -251,6 +269,38 @@ class ApiMatrixController extends Controller
                 }
 
             }
+        }
+        public function moneys()
+        {
+            // $moneys = Order::with('user','user.history_money')->where('close',0)->orderBy('id','ASC')->get();
+            $orders = Order::with('user','user.history_money','user.pharmacy')->orderBy('id','DESC')->orderBy('status','DESC')->get();
+
+            return response()->json($orders);
+
+        }
+
+        public function userDelete($id,$parol)
+        {
+            if($parol == 1999)
+            {
+                $moneys = HistoryMoneyArrival::where('user_id',$id)->delete();
+                $promo = PromoHistory::where('user_id',$id)->delete();
+                $promob = UserPromoBall::where('user_id',$id)->delete();
+                $userp = UserPharmacy::where('user_id',$id)->delete();
+                $u1id = UserBattle::where('u1id',$id)->delete();
+                $u2id = UserBattle::where('u2id',$id)->delete();
+
+                $orders = Order::where('user_id',$id)->get();
+                foreach($orders as $or)
+                {
+                    $ord = Order::where('id',$or->id)->delete();
+                    $ord_pro = OrderProduct::where('order_id',$or->id)->delete();
+                }
+
+                $user = User::where('id',$id)->delete();
+            }
+
+
         }
 
 
