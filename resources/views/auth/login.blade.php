@@ -2,56 +2,25 @@
 @section('login')
 
 <div class="main-login">
-    {{-- <form action="{{route('login')}}" method="POST" id="loginForm">
-        @csrf
-     <main class="flex-shrink-0 main has-footer">
-
-
-        <div class="container h-100 text-white" style="margin-top:50%;">
-            <div class="row h-100">
-                <div class="col-12 align-self-center mb-4">
-                    <div class="row justify-content-center">
-                        <div class="col-11 col-sm-7 col-md-6 col-lg-5 col-xl-4">
-                            <h2 class="font-weight-normal mb-5">Profilingizga kiring</h2>
-                            <div class="form-group float-label position-relative">
-                                <input type="password" class="form-control text-white" onfocus="this.removeAttribute('readonly');" readonly name="password">
-                                <label class="form-control-label text-white">Parol</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-    <div class="footer no-bg-shadow py-3">
-        <div class="row justify-content-center">
-            <div class="col">
-                <button type="submit" class="btn btn-default rounded btn-block">Login</button>
-            </div>
-        </div>
-    </div>
-    </form> --}}
     <form action="{{route('login')}}" method="POST" id="loginForm">
         @csrf
     <div class="flex-box">
-    <h4 style="color:white;">Parolni kiriting</h4>
-        <div class="passcode-area">
-        <input autofocus type="text" maxlength="1" id='log1'>
-        <input type="text" maxlength="1" id='log2'>
-        <input type="text" maxlength="1" id='log3'>
-        <input type="text" maxlength="1" id='log4'>
-        <input type="text" maxlength="1" id='log5'>
-        </div>
-        </div>
+    <h4 style="color:white;">Xush kelibsiz</h4>
 
+        </div>
+        <div class="passcode-area mb-5">
+            <input autofocus type="text" maxlength="1" id='log1'>
+            <input type="number" maxlength="1" id='log2'>
+            <input type="number" maxlength="1" id='log3'>
+            <input type="number" maxlength="1" id='log4'>
+            <input type="number" maxlength="1" id='log5'>
+            </div>
     <input type="text" id="logall" class="d-none" name="password">
 
-    <div class=" no-bg-shadow py-3">
+    <div class="no-bg-shadow py-3 mt-4">
         <div class="row justify-content-center">
             <div class="col-6">
-                <button type="button" onclick="myLogin()" class="btn btn-default rounded btn-block">Login</button>
+                <button type="button" onclick="myLogin()" class="btn btn-default rounded btn-block">Kirish</button>
             </div>
         </div>
     </div>

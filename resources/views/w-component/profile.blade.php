@@ -5,7 +5,7 @@
                         <div class="col-12 col-md-6">
                             <div class="card border-0 mb-4">
                                 <div class="card-body">
-                                    <div class="row align-items-center">
+                                    <div class="row align-items-center" data-toggle="modal" data-target="#rmorder{{$item->id}}">
                                         {{-- <div class="col-auto pr-0">
                                             <div class="avatar avatar-50 border-0 bg-default-light rounded-circle text-default">
                                                 <i class="material-icons vm text-template">local_atm</i>
@@ -62,3 +62,5 @@
                     </div>
                 </div>
 </div>
+
+

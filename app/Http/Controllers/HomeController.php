@@ -45,9 +45,9 @@ class HomeController extends Controller
 
         $markets = json_decode($res_market);
 
-        $orders = Order::where('user_id',Auth::id())->orderBy('id','ASC')->get();
+        $orders = Order::with('orderProduct','orderProduct.product','orderProduct.product.orderStock')->where('user_id',Auth::id())->orderBy('id','ASC')->get();
 
-        $active_order = Order::where('user_id',Auth::id())
+        $active_order = Order::with('orderProduct','orderProduct.product.orderStock')->where('user_id',Auth::id())
         ->where('status',4)
         ->orderBy('id','DESC')
         ->first();
@@ -61,7 +61,7 @@ class HomeController extends Controller
                     })->where('ends',0)->first();
         if($active_order)
         {
-            $qarz = Order::where('user_id',Auth::id())
+            $qarz = Order::with('orderProduct','orderProduct.product.orderStock')->where('user_id',Auth::id())
             ->whereRaw('order_price > money_arrival')
             ->where('status',4)
             ->where('id','!=',$active_order->id)
@@ -72,9 +72,6 @@ class HomeController extends Controller
         }
 
         // return $qarz;
-        // $new = new UserBattleServices;
-        // $new = $new->endBattle('2023-05-14');
-
 
             return view('home',[
                 'orders' => $orders,

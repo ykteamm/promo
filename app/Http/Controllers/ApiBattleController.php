@@ -14,4 +14,12 @@ class ApiBattleController extends Controller
             'provizors' => $get_pros
         ];
     }
+
+    public function orderUser(Request $request)
+    {
+        $get_pros = User::whereIn('region_id',$request['regions'])->get();
+        return [
+            'provizors' => $get_pros
+        ];
+    }
 }

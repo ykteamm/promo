@@ -19,4 +19,14 @@ class Medicine extends Model
     {
         return $this->hasMany(OrderProduct::class,'product_id','id');
     }
+
+    public function orderStock()
+    {
+        return $this->hasMany(OrderStock::class,'product_id','id');
+    }
+
+    public function price()
+    {
+        return $this->hasMany(PriceMedicine::class,'medicine_id','id');
+    }
 }

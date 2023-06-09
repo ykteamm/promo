@@ -29,6 +29,8 @@ Route::post('provizor-store', [UserController::class, 'provizorStore']);
 
 Route::post('get-provizor', [ApiBattleController::class, 'getProvizor']);
 
+Route::get('get-medicine', [ApiMatrixController::class, 'getMedicine']);
+
 Route::get('orders', [ApiMatrixController::class, 'orders']);
 
 Route::post('order-update', [ApiMatrixController::class, 'orderUpdate']);
@@ -42,6 +44,10 @@ Route::post('money-arrival', [ApiMatrixController::class, 'moneyArrival']);
 Route::post('battle-store', [ApiMatrixController::class, 'battleStore']);
 
 Route::post('get-order', [ApiMatrixController::class, 'getOrder']);
+
+Route::post('order-user', [ApiMatrixController::class, 'orderUser']);
+
+Route::post('product-save', [ApiMatrixController::class, 'productSave']);
 
 
 Route::get('moneys', [ApiMatrixController::class, 'moneys']);

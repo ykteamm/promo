@@ -4,29 +4,57 @@
         <div class="row">
             <div class="col-12 col-md-6">
                 <div class="card mb-4">
-                    <div class="card-body">
+
+                    @php
+                        $quantity = 0;
+                        $sold = 0;
+                        foreach ($active_order->orderProduct as $ord) {
+                            $quantity += $ord->quantity;
+                            foreach ($ord->product->orderStock as $stock) {
+                                if($ord->order_id == $stock->order_id)
+                                {
+                                    $sold += $stock->quantity;
+                                }
+                            }
+                        }
+                    @endphp
+                    <div class="card-body" data-toggle="modal" data-target="#rmorder{{$active_order->id}}">
                         <div class="row">
                             <div class="col text-left">
                                 <h5 class="mb-1" style="color:#272730;"> Buyurtma #{{$active_order->number}} </h5>
                             </div>
                             <div class="col-auto pl-0">
-                                <h5 class="mb-1" style="color:#272730;"> {{number_format($active_order->order_price,0,',',' ')}} so'm</h5>
+                                <h5 class="mb-1" style="color:#272730;"> {{number_format($quantity,0,',',' ')}} dona</h5>
 
                             </div>
                         </div>
                         @php
-                            $foiz = round($active_order->money_arrival/$active_order->order_price*100,1);
+                            $foiz = round($sold/$quantity*100,1);
                         @endphp
                         <div class="progress mt-3" style="height:20px;">
                             <div class="progress-bar"  role="progressbar" style="width:{{$foiz}}%;background:#1f92da;" aria-valuenow="{{$foiz}}" aria-valuemin="0" aria-valuemax="100">
                                 {{$foiz}}%
                             </div>
                         </div>
-                        <div class="mt-3"> <span style="color:#272730;background: #50f074;border-radius: 8px;padding: 4px 16px;">Sotuv {{$active_order->money_arrival}}/{{$active_order->order_price}}</span> </div>
+                        <div class="mt-3"> <span style="color:#272730;background: #50f074;border-radius: 8px;padding: 4px 16px;">Sotuv {{$sold}}/{{$quantity}}</span> </div>
                         @if ($qarz)
+
                         @foreach ($qarz as $q)
+                            @php
+                                $quantity = 0;
+                                $sold = 0;
+                                foreach ($q->orderProduct as $ord) {
+                                    $quantity += $ord->quantity;
+                                    foreach ($ord->product->orderStock as $stock) {
+                                        if($ord->order_id == $stock->order_id)
+                                        {
+                                            $sold += $stock->quantity;
+                                        }
+                                    }
+                                }
+                            @endphp
                             <div class="col-12 text-left mt-1" style="color:#272730">
-                                <span>Qarzdorlik  {{number_format(($q->order_price-$q->money_arrival),0,',',' ')}} so'm --- Buyurtma #{{$q->number}} </span>
+                                <span>Qarzdorlik  {{number_format(($quantity-$sold),0,',',' ')}} dona --- Buyurtma #{{$q->number}} </span>
                             </div>
                         @endforeach
                     @endif

@@ -14,6 +14,7 @@
 </div>
 @include('modal.reyting')
 @include('modal.bonus')
+@include('modal.order')
 
 @endsection
 @section('scripts')

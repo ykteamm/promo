@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Http;
 if(!function_exists('getHostNameUrl')){
     function getHostNameUrl() {
 
-        // $host = substr(request()->getHttpHost(),0,3);
+        $host = substr(request()->getHttpHost(),0,3);
 
-        return 127222;
+        return $host;
 
     }
 }

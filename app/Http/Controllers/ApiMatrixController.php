@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\HistoryMoneyArrival;
+use App\Models\Medicine;
 use App\Models\Money;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\OrderStock;
 use App\Models\PriceMedicine;
 use App\Models\PromoHistory;
 use App\Models\User;
@@ -86,19 +88,12 @@ class ApiMatrixController extends Controller
                             $active_order_update->close = 1;
                             $active_order_update->save();
 
-                            $this->updatePromoBall($q->id,$money,$request->provizor_id);
-
-
-
-
                         }elseif($money < $diff)
                         {
 
                             $active_order_update = Order::find($q->id);
                             $active_order_update->money_arrival = $q->money_arrival + $money;
                             $active_order_update->save();
-
-                            $this->updatePromoBall($q->id,$money,$request->provizor_id);
 
                             $money = 0;
 
@@ -109,7 +104,6 @@ class ApiMatrixController extends Controller
                             $active_order_update->money_arrival = $q->money_arrival + $money;
                             $active_order_update->close = 1;
                             $active_order_update->save();
-                            $this->updatePromoBall($q->id,$money,$request->provizor_id);
                             $money = 0;
 
                         }
@@ -171,7 +165,12 @@ class ApiMatrixController extends Controller
             'status' => $status
         ];
     }
+    public function getMedicine()
+    {
+        $medicine = Medicine::with('price')->get();
 
+        return $medicine;
+    }
     public function getOrder(Request $request)
     {
         $order = OrderProduct::with('product')->where('order_id',$request->order_id)->get();
@@ -186,10 +185,14 @@ class ApiMatrixController extends Controller
         ];
 
     }
+    public function proIds()
+    {
+        return [36,37,38,39,29,47,61,62,63,64,65];
+    }
     public function orderUpdate(Request $request)
     {
 
-        $proId = [36,37,38,39,29,47];
+        $proId = $this->proIds();
 
         $allsum = 0;
         $promosum = 0;
@@ -342,6 +345,222 @@ class ApiMatrixController extends Controller
 
         }
 
+        public function orderUser(Request $request)
+            {
+                $orders = User::with('order','order.orderProduct','order.orderProduct.product','stock')->whereIn('region_id',$request['regions'])->get();
+                return [
+                    'orders' => $orders
+                ];
+            }
+
+        public function productSave(Request $request)
+        {
+            $products = $request->product;
+            $user_id = $request->user_id;
+            $order_id = $request->order_id;
+
+            $money_arrival = Order::find($order_id)->money_arrival;
+
+            $sum = 0;
+            $stock_sum = 0;
+            foreach ($products as $key => $value) {
+                if($value[0] != null)
+                {
+
+                    $order_products = OrderProduct::where('order_id',$order_id)
+                    ->where('product_id',$key)
+                    ->first();
+
+                    $stock_products = OrderStock::where('order_id',$order_id)
+                    ->where('product_id',$key)
+                    ->sum('quantity');
+
+                    $all_stock = $order_products->quantity - $stock_products;
 
 
+                    if($all_stock < $value[0])
+                    {
+                        return response([
+                            'status' => 300,
+                            'msg' => 'Kiritayotgan dori soni buyurtmadan oshib ketdi',
+                        ]);
+                        break;
+                    }
+
+                    $sum += $order_products->product_price*$value[0];
+                    $stock_sum += $order_products->product_price*$stock_products;
+                }
+            }
+
+
+            if($sum > ($money_arrival-$stock_sum))
+            {
+                return response([
+                    'status' => 300,
+                    'msg' => 'Dorilarning summasi pul kelishidan oshib ketdi',
+                ]);
+            }else{
+                $crystal = 0;
+                foreach ($products as $key => $value) {
+                    if($value[0] != null)
+                    {
+
+                        $order_products = OrderProduct::where('order_id',$order_id)
+                        ->where('product_id',$key)
+                        ->first();
+
+
+
+                        $pr = $this->crstal($key,$value[0]);
+
+                        $crystal = $crystal + $pr;
+
+                        $stock = new OrderStock;
+                        $stock->user_id = $user_id;
+                        $stock->order_id = $order_id;
+                        $stock->product_id = $key;
+                        $stock->quantity = $value[0];
+                        $stock->product_price = $order_products->product_price;
+                        $stock->save();
+                    }
+                }
+
+                $this->promoCrs($user_id,$crystal);
+            }
+
+            return response([
+                'status' => 200,
+                'msg' => 'Saqlandi',
+            ]);
+
+        }
+        public function promoCrs($id,$crystal)
+        {
+                $my_battle = UserBattle::with('u1ids','u2ids')
+                            ->where(function($query) use ($id){
+                                        $query->where('u1id',$id)
+                                        ->orWhere('u2id',$id);
+                                    })->where('ends',0)->first();
+
+                if(!$my_battle)
+                {
+                    $promo_b = $crystal;
+
+                    $promo_ball = UserPromoBall::where('user_id',$id)->first();
+
+                    if($promo_ball)
+                        {
+                            $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
+                            $promo_ball->save();
+                        }else{
+                            $promo_ball = new UserPromoBall;
+                            $promo_ball->user_id = $id;
+                            $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
+                            $promo_ball->save();
+                        }
+                }
+
+        }
+
+        public function crstal($key,$soni)
+        {
+
+            $proId = $this->proIds();
+
+            if($key == 61)
+            {
+                $all_price = 0;
+
+                $ids = [39,38,4];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.25;
+                    }else{
+                        $all_price += $soni*$price->price*0.2;
+                    }
+                }
+            }elseif($key == 62)
+            {
+                $all_price = 0;
+
+                $ids = [36,51,27];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.25;
+                    }else{
+                        $all_price += $soni*$price->price*0.2;
+                    }
+                }
+            }
+            elseif($key == 63)
+            {
+                $all_price = 0;
+
+                $ids = [29,4,7];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.25;
+                    }else{
+                        $all_price += $soni*$price->price*0.2;
+                    }
+                }
+            }
+            elseif($key == 64)
+            {
+                $all_price = 0;
+
+                $ids = [47,39,4];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.25;
+                    }else{
+                        $all_price += $soni*$price->price*0.2;
+                    }
+                }
+            }
+            elseif($key == 65)
+            {
+                $all_price = 0;
+
+                $ids = [26,39,4,51];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.25;
+                    }else{
+                        $all_price += $soni*$price->price*0.2;
+                    }
+                }
+            }elseif(in_array($key,$proId))
+            {
+                $price = PriceMedicine::where('medicine_id',$key)->first();
+
+                $all_price = $soni*$price->price*0.25;
+
+            }else{
+                $price = PriceMedicine::where('medicine_id',$key)->first();
+
+                $all_price = $soni*$price->price*0.2;
+            }
+            return $all_price;
+        }
 }
