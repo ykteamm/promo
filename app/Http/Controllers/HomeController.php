@@ -37,9 +37,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $new = new UserBattleServices;
-        // $n = $new->endBattle('2023-06-11');
-        // dd($n);
+        $new = new UserBattleServices;
+        $n = $new->endBattle(date('Y-m-d'));
+        
         $res_market = Http::get(getBattleUrl().'/api/outer-market');
 
         $markets = json_decode($res_market);
