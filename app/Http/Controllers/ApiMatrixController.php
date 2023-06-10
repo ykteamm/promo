@@ -25,6 +25,14 @@ class ApiMatrixController extends Controller
         return response()->json($orders);
     }
 
+    public function hisobot()
+    {
+        $orders = User::with('order')
+        ->get();
+
+        return response()->json($orders);
+    }
+
     public function changeStatus(Request $request)
     {
 
@@ -560,6 +568,107 @@ class ApiMatrixController extends Controller
                 $price = PriceMedicine::where('medicine_id',$key)->first();
 
                 $all_price = $soni*$price->price*0.2;
+            }
+            return $all_price;
+        }
+        public function crstalLoser($key,$soni)
+        {
+
+            $proId = $this->proIds();
+
+            if($key == 61)
+            {
+                $all_price = 0;
+
+                $ids = [39,38,4];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.05;
+                    }else{
+                        $all_price += 0;
+                    }
+                }
+            }elseif($key == 62)
+            {
+                $all_price = 0;
+
+                $ids = [36,51,27];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.05;
+                    }else{
+                        $all_price += 0;
+                    }
+                }
+            }
+            elseif($key == 63)
+            {
+                $all_price = 0;
+
+                $ids = [29,4,7];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.05;
+                    }else{
+                        $all_price += 0;
+                    }
+                }
+            }
+            elseif($key == 64)
+            {
+                $all_price = 0;
+
+                $ids = [47,39,4];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.05;
+                    }else{
+                        $all_price += 0;
+                    }
+                }
+            }
+            elseif($key == 65)
+            {
+                $all_price = 0;
+
+                $ids = [26,39,4,51];
+                foreach($ids as $i)
+                {
+                    $price = PriceMedicine::where('medicine_id',$i)->first();
+
+                    if(in_array($i,$proId))
+                    {
+                        $all_price += $soni*$price->price*0.05;
+                    }else{
+                        $all_price += 0;
+                    }
+                }
+            }elseif(in_array($key,$proId))
+            {
+                $price = PriceMedicine::where('medicine_id',$key)->first();
+
+                $all_price = $soni*$price->price*0.05;
+
+            }else{
+                $price = PriceMedicine::where('medicine_id',$key)->first();
+
+                $all_price = 0;
             }
             return $all_price;
         }

@@ -31,6 +31,8 @@ Route::post('get-provizor', [ApiBattleController::class, 'getProvizor']);
 
 Route::get('get-medicine', [ApiMatrixController::class, 'getMedicine']);
 
+Route::get('hisobot', [ApiMatrixController::class, 'hisobot']);
+
 Route::get('orders', [ApiMatrixController::class, 'orders']);
 
 Route::post('order-update', [ApiMatrixController::class, 'orderUpdate']);

@@ -2,6 +2,7 @@
 
 use App\Models\HistoryMoneyArrival;
 use App\Models\Order;
+use App\Models\OrderStock;
 use App\Models\UserPromoBall;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -33,12 +34,13 @@ if(!function_exists('getBattleUrl')){
 if(!function_exists('getMoneyUser')){
     function getMoneyUser($start_day,$end_day,$id) {
 
-        $allprice = HistoryMoneyArrival::whereDate('add_date','>=',$start_day)
-        ->whereDate('add_date','<=',$end_day)
+        $my_stocks = OrderStock::selectRaw('SUM(product_price*quantity) as price')
+        ->whereDate('created_at','>=',$start_day)
+        ->whereDate('created_at','<=',$end_day)
         ->where('user_id',$id)
-        ->sum('money');
+        ->value('price')??0;
 
-        return $allprice??0;
+        return $my_stocks;
 
     }
 }
@@ -46,43 +48,78 @@ if(!function_exists('getMoneyUser')){
 if(!function_exists('getMoneyUserBonus')){
     function getMoneyUserBonus($start_day,$end_day,$id,$partner_id) {
 
-        $money1 = HistoryMoneyArrival::whereDate('add_date','>=',$start_day)
-        ->whereDate('add_date','<=',$end_day)
+        $my_stocks = OrderStock::selectRaw('SUM(product_price*quantity) as price')
+        ->whereDate('created_at','>=',$start_day)
+        ->whereDate('created_at','<=',$end_day)
         ->where('user_id',$id)
-        ->sum('money');
+        ->value('price')??0;
 
-        $money2 = HistoryMoneyArrival::whereDate('add_date','>=',$start_day)
-        ->whereDate('add_date','<=',$end_day)
+        $my_active_order = Order::where('user_id',$id)
+        ->where('status',4)
+        ->orderBy('id','DESC')
+        ->first()->order_price??0;
+
+        $pr_stocks = OrderStock::selectRaw('SUM(product_price*quantity) as price')
+        ->whereDate('created_at','>=',$start_day)
+        ->whereDate('created_at','<=',$end_day)
         ->where('user_id',$partner_id)
-        ->sum('money');
+        ->value('price')??0;
 
-        $active_order1 = Order::where('user_id',$id)
+        $pr_active_order = Order::where('user_id',$id)
         ->where('status',4)
         ->orderBy('id','DESC')
-        ->first();
+        ->first()->order_price??0;
 
-        if($active_order1)
+        $min = $my_stocks*0.2+$pr_stocks*0.6*0.05;
+        $max = $my_active_order*0.2+$pr_active_order*0.6*0.05;
+
+        if($min > $max)
         {
-            $foiz1 = ($active_order1->promo_price*100)/$active_order1->order_price;
+            $bonus = floor($min/1000);
+
         }else{
-            $foiz1 = 60;
+            $bonus = floor($min/1000).' - '.floor($max/1000);
         }
-
-        $active_order2 = Order::where('user_id',$partner_id)
-        ->where('status',4)
-        ->orderBy('id','DESC')
-        ->first();
-
-        if($active_order2)
-        {
-            $foiz2 = ($active_order2->promo_price*100)/$active_order2->order_price;
-        }else{
-            $foiz2 = 60;
-        }
-
-        $bonus = round($money1*0.2 + $money1*$foiz1/100*0.1 + $money2*$foiz2/100*0.05 + $money2*0.05);
 
         return $bonus;
+
+        // $money1 = HistoryMoneyArrival::whereDate('add_date','>=',$start_day)
+        // ->whereDate('add_date','<=',$end_day)
+        // ->where('user_id',$id)
+        // ->sum('money');
+
+        // $money2 = HistoryMoneyArrival::whereDate('add_date','>=',$start_day)
+        // ->whereDate('add_date','<=',$end_day)
+        // ->where('user_id',$partner_id)
+        // ->sum('money');
+
+        // $active_order1 = Order::where('user_id',$id)
+        // ->where('status',4)
+        // ->orderBy('id','DESC')
+        // ->first();
+
+        // if($active_order1)
+        // {
+        //     $foiz1 = ($active_order1->promo_price*100)/$active_order1->order_price;
+        // }else{
+        //     $foiz1 = 60;
+        // }
+
+        // $active_order2 = Order::where('user_id',$partner_id)
+        // ->where('status',4)
+        // ->orderBy('id','DESC')
+        // ->first();
+
+        // if($active_order2)
+        // {
+        //     $foiz2 = ($active_order2->promo_price*100)/$active_order2->order_price;
+        // }else{
+        //     $foiz2 = 60;
+        // }
+
+        // $bonus = round($money1*0.2 + $money1*$foiz1/100*0.1 + $money2*$foiz2/100*0.05 + $money2*0.05);
+
+        // return $bonus;
 
     }
 }

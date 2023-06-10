@@ -13,4 +13,5 @@ class Region extends Model
         'name',
         'side',
     ];
+
 }

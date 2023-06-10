@@ -196,11 +196,12 @@
             {{ number_format($summa_all2, 0, ',', ' ') }}
         </div>
         <div class="container mt-5 natija-img">
-            <img src="{{ asset('mobile/natija.webp') }}" width="190px" alt="">
+            <img src="{{ asset('mobile/nat1.png') }}" width="190px" alt="">
 
-                <div class="bonus_pro supercell" style="border-radius:5px;padding: 2px 2px;">
+                <div class="bonus_pro supercell" style="border-radius:5px;padding: 20px 90px;">
+                    {{$bonus1}}
 
-                    {{number_format(floor($bonus1/1000),0,',',' ')}}
+                    <img src="{{ asset('mobile/cristal234.png') }}" width="20px" alt="">
 
                 </div>
         </div>

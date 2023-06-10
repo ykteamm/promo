@@ -104,14 +104,26 @@
 
       .bonus_pro {
         position: absolute;
-        bottom: 54%;
-        right: 38%;
+        bottom: 35%;
+        right: 10%;
         color: white;
         padding-left: 20px;
         padding-right: 20px;
-        font-size:22px;
+        font-size:15px;
       }
 
+      @media screen and (max-width: 380px) {
+            .bonus_pro {
+            position: absolute;
+            padding: 20px 75px !important;
+            bottom: 35%;
+            right: 12%;
+            color: white;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-size:14px;
+        }
+      }
       .stars1 {
         position: absolute;
         bottom: 55%;
