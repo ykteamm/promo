@@ -26,7 +26,7 @@
 
         <ul class="nav nav-pills flex-column ">
             <li class="nav-item">
-                <a class="nav-link active" href="index.html">
+                <a class="nav-link active" href="{{route('restart')}}">
                     <div>
                         <span class="material-icons icon">account_balance</span>
                         Home
@@ -34,31 +34,31 @@
                     <span class="arrow material-icons">chevron_right</span>
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="{{route('product.index')}}">
                     <div>
                         <span class="material-icons icon">insert_chart</span>
                         Dori Mahsulotlari
                     </div>
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> --}}
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="{{route('shop-product.index')}}">
                     <div>
                         <span class="material-icons icon">insert_chart</span>
                         Market Mahsulotlari
                     </div>
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> --}}
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="{{route('admin-order.index')}}">
                     <div>
                         <span class="material-icons icon">insert_chart</span>
                         Buyurtma
                     </div>
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> --}}
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="gift_cards.html">
                     <div>
                         <span class="material-icons icon">card_giftcard</span>
@@ -66,8 +66,8 @@
                     </div>
                     <span class="arrow material-icons">chevron_right</span>
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> --}}
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="my_orders.html">
                     <div>
                         <span class="material-icons icon">shopping_bag</span>
@@ -75,8 +75,8 @@
                     </div>
                     <span class="arrow material-icons">chevron_right</span>
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> --}}
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="setting.html">
                     <div>
                         <span class="material-icons icon">settings</span>
@@ -84,8 +84,8 @@
                     </div>
                     <span class="arrow material-icons">chevron_right</span>
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> --}}
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="pages.html">
                     <div>
                         <span class="material-icons icon">layers</span>
@@ -93,8 +93,8 @@
                     </div>
                     <span class="arrow material-icons">chevron_right</span>
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> --}}
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="controls.html">
                     <div>
                         <span class="material-icons icon">widgets</span>
@@ -102,7 +102,7 @@
                     </div>
                     <span class="arrow material-icons">chevron_right</span>
                 </a>
-            </li>
+            </li> --}}
         </ul>
         <div class="text-center">
             <form action="{{route('logout')}}" method="POST">

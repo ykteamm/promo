@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\ApiMatrixController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShopProductController;
 use App\Http\Controllers\OrderController;
@@ -49,13 +50,16 @@ Route::middleware('auth')->group(function () {
     Route::resource('shop-order', ShopOrderController::class);
     Route::resource('admin-order', AdminOrderController::class);
 
-    Route::prefix('admin')->group(function () {
+    Route::prefix('code')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
     Route::post('/order/delivery/{id}', [AdminOrderController::class, 'delivery'])->name('delivery');
     Route::post('/order/cashback/{id}', [AdminOrderController::class, 'cashback'])->name('cashback');
 
     Route::get('change-status/{order_id}/{status}', [OrderController::class,'changeOrderStatus'])->name('orderpro.status');
 
+    Route::get('/restart', [ApiMatrixController::class, 'productSaveTest'])->name('restart');
+
+    
 
 });
 });

@@ -69,8 +69,6 @@ class ApiMatrixController extends Controller
                 $history->add_date = $request->date;
                 $history->save();
 
-                $this->updateUserMoney($request->provizor_id,$request->money);
-                $this->updateFixedBonus($request->provizor_id,$request->money);
 
                 $qarz = Order::where('user_id',$request->provizor_id)
                     ->whereRaw('order_price > money_arrival')
@@ -281,7 +279,7 @@ class ApiMatrixController extends Controller
                 $promo_b = round($sum*0.1);
 
                 $promo_ball = UserPromoBall::where('user_id',$id)->first();
-            if($promo_ball)
+                if($promo_ball)
                 {
                     $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
                     $promo_ball->save();
@@ -345,6 +343,7 @@ class ApiMatrixController extends Controller
                 {
                     $ord = Order::where('id',$or->id)->delete();
                     $ord_pro = OrderProduct::where('order_id',$or->id)->delete();
+                    $ord_pro = OrderStock::where('order_id',$or->id)->delete();
                 }
 
                 $user = User::where('id',$id)->delete();
@@ -466,6 +465,26 @@ class ApiMatrixController extends Controller
                             $promo_ball->promo_ball = $promo_ball->promo_ball + $promo_b;
                             $promo_ball->save();
                         }
+                }
+
+        }
+
+        public function promoCrsUpdate($id,$crystal)
+        {
+
+            $promo_b = $crystal;
+
+            $promo_ball = UserPromoBall::where('user_id',$id)->first();
+
+            if($promo_ball)
+                {
+                    $promo_ball->promo_ball = $promo_b;
+                    $promo_ball->save();
+                }else{
+                    $promo_ball = new UserPromoBall;
+                    $promo_ball->user_id = $id;
+                    $promo_ball->promo_ball = $promo_b;
+                    $promo_ball->save();
                 }
 
         }
@@ -671,5 +690,43 @@ class ApiMatrixController extends Controller
                 $all_price = 0;
             }
             return $all_price;
+        }
+
+        public function productSaveTest()
+        {
+            // $products = $request->product;
+            // $user_id = $request->user_id;
+            // $order_id = $request->order_id;
+            $user_ids = OrderStock::distinct('user_id')->pluck('user_id')->toArray();
+
+            $p = [];
+
+            foreach($user_ids as $ids)
+            {
+
+
+                $products = OrderStock::where('user_id',$ids)->get();
+                
+
+                    $crystal = 0;
+                    foreach ($products as $key => $pro) {
+
+                            $pr = $this->crstal($pro->product_id,$pro->quantity);
+
+                            $crystal = $crystal + $pr;
+
+                        
+                    }
+
+                // $p[$ids] = $crystal;
+
+                    $this->promoCrsUpdate($ids,$crystal);
+
+            
+            
+            }
+            
+            return $p;
+
         }
 }
