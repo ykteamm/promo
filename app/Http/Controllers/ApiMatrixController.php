@@ -15,6 +15,7 @@ use App\Models\UserBattle;
 use App\Models\UserPharmacy;
 use App\Models\UserPromoBall;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ApiMatrixController extends Controller
 {
@@ -224,6 +225,20 @@ class ApiMatrixController extends Controller
                 'order_price' => $allsum,
                 'promo_price' => $promosum,
             ]);
+            return response([
+                'status' => 200
+            ]);
+    }
+    public function orderDelete(Request $request)
+    {
+
+        $order_id = $request->order_id;
+
+        DB::table('orders')->where('id',$order_id)->delete();
+        DB::table('order_products')->where('order_id',$order_id)->delete();
+        DB::table('order_stocks')->where('order_id',$order_id)->delete();
+        DB::table('promo_histories')->where('order_id',$order_id)->delete();
+        
             return response([
                 'status' => 200
             ]);

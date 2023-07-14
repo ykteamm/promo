@@ -37,6 +37,8 @@ Route::get('orders', [ApiMatrixController::class, 'orders']);
 
 Route::post('order-update', [ApiMatrixController::class, 'orderUpdate']);
 
+Route::post('order-delete', [ApiMatrixController::class, 'orderDelete']);
+
 Route::post('change-status', [ApiMatrixController::class, 'changeStatus']);
 
 Route::get('provizors', [ApiMatrixController::class, 'allProvizors']);
