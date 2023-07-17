@@ -31,6 +31,12 @@ class ApiMatrixController extends Controller
         $orders = User::with('order')
         ->get();
 
+        $orders = User::with([
+            'order' => function($q) {
+                $q->where('status','!=',5);
+            }])
+            ->get();
+
         return response()->json($orders);
     }
 
@@ -709,9 +715,6 @@ class ApiMatrixController extends Controller
 
         public function productSaveTest()
         {
-            // $products = $request->product;
-            // $user_id = $request->user_id;
-            // $order_id = $request->order_id;
             $user_ids = OrderStock::distinct('user_id')->pluck('user_id')->toArray();
 
             $p = [];
@@ -721,24 +724,15 @@ class ApiMatrixController extends Controller
 
 
                 $products = OrderStock::where('user_id',$ids)->get();
-                
-
+             
                     $crystal = 0;
                     foreach ($products as $key => $pro) {
 
                             $pr = $this->crstal($pro->product_id,$pro->quantity);
 
-                            $crystal = $crystal + $pr;
-
-                        
+                            $crystal = $crystal + $pr;  
                     }
-
-                // $p[$ids] = $crystal;
-
                     $this->promoCrsUpdate($ids,$crystal);
-
-            
-            
             }
             
             return $p;
