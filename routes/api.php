@@ -33,6 +33,8 @@ Route::get('get-medicine', [ApiMatrixController::class, 'getMedicine']);
 
 Route::get('hisobot', [ApiMatrixController::class, 'hisobot']);
 
+Route::get('promo-ball', [ApiMatrixController::class, 'promoBall']);
+
 Route::get('orders', [ApiMatrixController::class, 'orders']);
 
 Route::post('order-update', [ApiMatrixController::class, 'orderUpdate']);

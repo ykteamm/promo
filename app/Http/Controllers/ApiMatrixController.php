@@ -26,6 +26,8 @@ class ApiMatrixController extends Controller
         return response()->json($orders);
     }
 
+    
+
     public function hisobot()
     {
         $orders = User::with('order')
@@ -346,6 +348,46 @@ class ApiMatrixController extends Controller
 
             return response()->json($orders);
 
+        }
+
+        public function promoBall()
+        {
+            $orders = Order::all();
+
+                $p = [];
+
+                foreach($orders as $order)
+                {
+
+
+                    $products = OrderProduct::where('order_id',$order->id)->get();
+                
+                        $crystal = 0;
+                        foreach ($products as $key => $pro) {
+
+                                $pr = $this->crstal($pro->product_id,$pro->quantity);
+
+                                $crystal = $crystal + $pr;  
+                        }
+
+                        $ball = UserPromoBall::where('user_id',$order->user_id)->first();
+
+                        if($ball)
+                        {
+                            $minus = $ball->promo_ball;
+                        }else{
+                            $minus = 0;
+                        }
+
+                        // $this->promoCrsUpdate($ids,$crystal);
+                        // $p[$order->id] = $crystal;
+                        $p[$order->id] = array(
+                            'crystal' => $crystal,
+                            'minus' =>  $minus,
+                        );
+                }
+                
+                return $p;
         }
 
         public function userDelete($id,$parol)
