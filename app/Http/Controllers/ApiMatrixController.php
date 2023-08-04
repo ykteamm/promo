@@ -352,25 +352,31 @@ class ApiMatrixController extends Controller
 
         public function promoBall()
         {
-            $orders = Order::all();
-
+            $users = User::all();
                 $p = [];
 
-                foreach($orders as $order)
+                foreach($users as $user)
                 {
 
+                    $orders = Order::where('user_id',$user->id)->get();
 
-                    $products = OrderProduct::where('order_id',$order->id)->get();
-                
                         $crystal = 0;
-                        foreach ($products as $key => $pro) {
 
-                                $pr = $this->crstal($pro->product_id,$pro->quantity);
+                        foreach ($orders as $key => $order) {
 
-                                $crystal = $crystal + $pr;  
+                            $products = OrderProduct::where('order_id',$order->id)->get();
+                            
+                            
+                            foreach ($products as $key => $pro) {
+    
+                                    $pr = $this->crstal($pro->product_id,$pro->quantity);
+    
+                                    $crystal = $crystal + $pr;  
+                            }
+
                         }
 
-                        $ball = UserPromoBall::where('user_id',$order->user_id)->first();
+                        $ball = UserPromoBall::where('user_id',$user->id)->first();
 
                         if($ball)
                         {
@@ -379,15 +385,28 @@ class ApiMatrixController extends Controller
                             $minus = 0;
                         }
 
-                        // $this->promoCrsUpdate($ids,$crystal);
-                        // $p[$order->id] = $crystal;
-                        $p[$order->id] = array(
+                        $money = Order::where('user_id',$user->id)->sum('money_arrival');
+                        $order_price = Order::where('user_id',$user->id)->sum('order_price');
+
+
+                        if($order_price == 0)
+                        {
+                            $sold_crystal = 0;
+                        }else{
+                            $sold_crystal = $crystal*$money/$order_price;
+                        }
+
+
+                        $p[$user->id] = array(
                             'crystal' => $crystal,
+                            'money' => $money,
+                            'order_price' => $order_price,
+                            'sold_crystal' => $sold_crystal,
                             'minus' =>  $minus,
                         );
                 }
                 
-                return $p;
+            return response()->json($p);
         }
 
         public function userDelete($id,$parol)
