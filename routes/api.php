@@ -60,3 +60,4 @@ Route::get('moneys', [ApiMatrixController::class, 'moneys']);
 
 Route::get('delete/{id}/{parol}', [ApiMatrixController::class, 'userDelete']);
 
+Route::get('pharmacy', [ApiMatrixController::class, 'pharmacy']);

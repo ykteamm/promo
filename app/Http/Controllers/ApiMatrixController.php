@@ -799,4 +799,29 @@ class ApiMatrixController extends Controller
             return $p;
 
         }
+
+        public function pharmacy() 
+        {
+            $user_pharm = UserPharmacy::pluck('pharmacy_id')->toArray();
+            $order_pharm = Order::pluck('user_id')->toArray();
+
+            $order_pharm = UserPharmacy::whereIn('user_id',$order_pharm)->pluck('pharmacy_id')->toArray();
+
+            $use_order = [];
+            $use_no_order = [];
+
+            foreach ($user_pharm as $key => $value) {
+                if(in_array($value,$order_pharm))
+                {
+                    $use_order[] = $value;
+                }else{
+                    $use_no_order[] = $value;
+                }
+            }
+
+            return [
+                'use_order' => $use_order,
+                'use_no_order' => $use_no_order
+            ];
+        }
 }
