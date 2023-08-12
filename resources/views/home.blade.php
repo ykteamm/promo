@@ -15,6 +15,7 @@
 @include('modal.reyting')
 @include('modal.bonus')
 @include('modal.order')
+@include('modal.history-crystal')
 
 @endsection
 @section('scripts')

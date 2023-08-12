@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CrystalHistory;
 use App\Models\HistoryMoneyArrival;
 use App\Models\Medicine;
 use App\Models\Money;
@@ -823,5 +824,26 @@ class ApiMatrixController extends Controller
                 'use_order' => $use_order,
                 'use_no_order' => $use_no_order
             ];
+        }
+
+        public function getCrystalHistory()
+        {
+
+            $history = CrystalHistory::with('user')->orderBy('user_id','ASC')->get();
+
+            return $history;
+
+        }
+
+        public function crystalHistory(Request $request)
+        {
+
+            $battle = new CrystalHistory;
+            $battle->user_id = $request->user_id;
+            $battle->crystal = $request->crystal;
+            $battle->comment = $request->comment;
+            $battle->save();
+
+            return ['save' => 'ok'];
         }
 }

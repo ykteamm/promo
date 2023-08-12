@@ -73,6 +73,7 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
+
     protected function attemptLoginP(Request $request)
     {
         $pass = ucfirst($request->password);
@@ -80,7 +81,7 @@ class LoginController extends Controller
         // if($pass){
         //     $p = $pass->pass;
         // }
-        $arr = array('pass' => $pass,'password' => $pass);
+        $arr = array('pass' => $pass ,'password' => $pass);
 
         // dd($arr);
 

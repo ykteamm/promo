@@ -20,10 +20,19 @@
             <div class="input-group">
                 {{-- <input type="text" value="{{userElexir()->elexir}}" class="form-control" disabled style="border-top-right-radius: 18px !important;border-bottom-right-radius: 18px !important;height: calc(1.5em + 0.75rem + -6px);"> --}}
                 <div class="input-group-append">
-                    <button class="btn img-container" type="button" style="padding: 0px 0px;" data-toggle="modal" data-target="#history-elexir">
+                    <button class="btn img-container" type="button" style="padding: 0px 0px;" data-toggle="modal" data-target="#history-crystal">
                         <img src="{{asset('mobile/cris.png')}}" width="150px" height="30px" alt="">
                         <div class="text-block supercell">
-                            {{number_format(floor(getMyPromoBall()->promo_ball/1000),0,',',' ')}}
+
+                            @php
+                                $cryst = getMyPromoBall()->promo_ball/1000 - $mccryst;
+                                if($cryst < 0)
+                                {
+                                    $cryst = 0;
+                                }
+                            @endphp
+
+                            {{number_format(floor($cryst),0,',',' ')}}
                             {{-- {{getMyPromoBall()->promo_ball}} --}}
                             {{-- 12 700 --}}
                           </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CrystalHistory;
 use App\Models\HistoryMoneyArrival;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -71,6 +72,10 @@ class HomeController extends Controller
         }
 
         // return $qarz;
+        $crystalhistory = CrystalHistory::where('user_id',Auth::id())->orderBy('id','ASC')->get();
+
+        $mccryst = CrystalHistory::where('user_id',Auth::id())->sum('crystal');
+
 
             return view('home',[
                 'orders' => $orders,
@@ -78,6 +83,8 @@ class HomeController extends Controller
                 'my_battle' => $my_battle,
                 'qarz' => $qarz,
                 'markets' => $markets,
+                'crystalhistory' => $crystalhistory,
+                'mccryst' => $mccryst,
             ]);
     }
     public function getIp(){
