@@ -63,5 +63,7 @@ Route::get('delete/{id}/{parol}', [ApiMatrixController::class, 'userDelete']);
 Route::get('pharmacy', [ApiMatrixController::class, 'pharmacy']);
 
 
+Route::get('crystal', [ApiMatrixController::class, 'getCrystal']);
+
 Route::get('get-crystal-history', [ApiMatrixController::class, 'getCrystalHistory']);
 Route::post('crystal-history', [ApiMatrixController::class, 'crystalHistory']);

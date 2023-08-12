@@ -16,6 +16,7 @@ use App\Models\UserBattle;
 use App\Models\UserPharmacy;
 use App\Models\UserPromoBall;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ApiMatrixController extends Controller
@@ -845,5 +846,31 @@ class ApiMatrixController extends Controller
             $battle->save();
 
             return ['save' => 'ok'];
+        }
+
+        public function getCrystal()
+        {
+            $users = User::all();
+            $crystal = [];
+            foreach ($users as $key => $value) {
+
+                $history = CrystalHistory::where('user_id',$value->id)->sum('crystal');
+                
+
+                $promo = UserPromoBall::where('user_id',$value->id)->first();
+                    if(!$promo)
+                    {
+                        $promo = new UserPromoBall;
+                        $promo->user_id = $value->id;
+                        $promo->promo_ball = 0;
+                        $promo->save();
+                    }
+                    
+
+                $crystal[$value->id] = array('user' => $value,'history' => $history, 'promo' => $promo->promo_ball);
+
+            }
+
+            return $crystal;
         }
 }
